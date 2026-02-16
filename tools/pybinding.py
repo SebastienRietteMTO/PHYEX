@@ -171,7 +171,7 @@ def pybinding(fortran_in, scope, fortran_out, python_out, libso,
         elif var['n'] == 'KSPLITR':
             moduleList.append('USE MODD_CLOUDPAR_n, ONLY: KSPLITR => NSPLITR')
             argList2.append('KSPLITR')
-        elif vartype.startswith('CHARACTER(LEN=') and vartype[14].split(')')[0] != '1':
+        elif vartype.startswith('CHARACTER(LEN='):
             charlen = int(vartype[14:].split(')')[0])
             #We must use a one-character length arrays,
             #we add a dimension to replace the string length

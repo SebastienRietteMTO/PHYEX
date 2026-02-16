@@ -69,7 +69,7 @@ IMPLICIT NONE
 !
 TYPE(DIMPHYEX_T),              INTENT(IN)    :: D
 TYPE(CST_T),                   INTENT(IN)    :: CST
-CHARACTER(1),                  INTENT(IN)    :: HPHASE    ! Liquid or solid hydrometeors
+CHARACTER(LEN=1),              INTENT(IN)    :: HPHASE    ! Liquid or solid hydrometeors
 INTEGER,                       INTENT(IN)    :: KMOMENTS  ! Number of moments 
 INTEGER,                       INTENT(IN)    :: KID       ! Hydrometeor ID
 INTEGER,                       INTENT(IN)    :: KISHAPE   ! Ice shape ID if LCRYSTAL_SHAPE (0 otherwise)

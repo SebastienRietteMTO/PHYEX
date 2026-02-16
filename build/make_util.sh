@@ -260,6 +260,9 @@ function main() {
       pybinding.py micro/lima_adjust_split.F90 sub:LIMA_ADJUST_SPLIT pyphyex.F90 \
                    ../build/bin/pyphyex.py ./../lib/libphyex.so
       pybinding.py micro/lima.F90 sub:LIMA pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
+      pybinding.py micro/mode_lima_sedimentation.F90 \
+                   module:MODE_LIMA_SEDIMENTATION/sub:LIMA_SEDIMENTATION \
+                   pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
     else
       cat <<......EOF > pyphyex.F90
       SUBROUTINE PYPHYEXSUB
