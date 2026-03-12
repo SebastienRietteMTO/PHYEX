@@ -110,10 +110,12 @@ else
   gmkpack_l[49t0]=OMPIGFORT920DBL
   gmkpack_l[49t2]=OMPIGFORT920DBL
   gmkpack_l[50t1]=OMPI5GFORT141DP50
+  gmkpack_l[50t2]=OMPI5GFORT141DP50
   gmkpack_o[default]=xfftw
   gmkpack_o[49t0]=x
   gmkpack_o[49t2]=x
   gmkpack_o[50t1]=x
+  gmkpack_o[50t2]=x
   defaultMainPackVersion=01
   defaultRef='split_${cycle}'
 fi
@@ -174,7 +176,7 @@ function usage {
   echo "The -f flag (full recompilation) is active only at pack creation"
   echo
   echo "The PHYEXROOTPACK environment variable, if set, is used as the argument"
-  echo "of the --rootpack option of ial-git2pack, for incremental packs."
+  echo "of the --rootpack option of ial-git2pack/ial-to_pack, for incremental packs."
 }
 
 packcreation=0
@@ -459,8 +461,13 @@ if [ $packcreation -eq 1 ]; then
 
     export GMKTMP=/dev/shm
 
-    if [ $cycle == '49t2' -o $cycle == '50t1' ]; then
-      if ! which ial-git2pack > /dev/null 2>&1; then
+    if [ $cycle == '49t2' -o $cycle == '50t1' -o $cycle == '50t2' ]; then
+      if [ $cycle == '49t2' -o $cycle == '50t1' ]; then      
+        ialcmd=ial-git2pack
+      else
+        ialcmd=ial-to_pack
+      fi
+      if ! which $ialcmd > /dev/null 2>&1; then
         echo "ial-git2pack not found, please install it"
         exit 7
       fi
@@ -482,10 +489,10 @@ if [ $packcreation -eq 1 ]; then
       else
         kind=main
       fi
-      echo y | ial-git2pack -l ${gmkpack_l} -o ${gmkpack_o} -t $kind -n 10 \
-                            -r $tmpbuilddir/IAL -p masterodb \
-                            $ROOTPACKopt \
-                            --homepack $tmpbuilddir/pack $IALbundle_tag
+      echo y | $ialcmd -l ${gmkpack_l} -o ${gmkpack_o} -t $kind -n 10 \
+                       -r $tmpbuilddir/IAL -p masterodb \
+                       $ROOTPACKopt \
+                       --homepack $tmpbuilddir/pack $IALbundle_tag
 
       #Moving
       oldname=$(echo $tmpbuilddir/pack/*)
@@ -519,8 +526,13 @@ if [ $packcreation -eq 1 ]; then
       fi
 
       #Prepare PHYEX inclusion
-      rm -rf src/local/phyex
-      mkdir src/local/phyex
+      if [ $cycle == '49t2' -o $cycle == '50t1' ]; then
+        rm -rf src/local/phyex
+        mkdir src/local/phyex
+      else
+        rm -rf hub/local/src/PHYEX/phyex
+        mkdir -p hub/local/src/PHYEX/phyex
+      fi
 
     elif [ $fullcompilation == 0 ]; then
       #Incremental compilation old style
@@ -615,14 +627,19 @@ if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
     echo "phyex directory doesn't exist in pack ($HOMEPACK/$name)"
     exit 7
   else
-    cd $HOMEPACK/$name/src/local/phyex
+    subs="-s gmkpack_ignored_files -s turb -s micro -s aux -s ext -s conv -s externals" #externals is the old name for aux/ext
+    if [ -d $HOMEPACK/$name/hub/local/src/PHYEX/phyex ]; then
+      cd $HOMEPACK/$name/hub/local/src/PHYEX/phyex
+      subs="$subs -s CMakeLists.txt -s cmake"
+    else
+      cd $HOMEPACK/$name/src/local/phyex
+    fi
 
     if [ $useexpand == 1 ]; then
       expand_options="--mnhExpand"
     else
       expand_options=""
     fi
-    subs="-s gmkpack_ignored_files -s turb -s micro -s aux -s ext -s conv -s externals" #externals is the old name for aux/ext
     prep_code=$PHYEXTOOLSDIR/prep_code.sh
     if [ "$fromdir" == '' ]; then
       echo "Clone repository, and checkout commit $commit (using prep_code.sh)"
@@ -646,16 +663,18 @@ if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
     if [ $packupdate -eq 1 ]; then
       #Update only modified files
       cd PHYEX
-      for file in $(find turb micro conv aux -type f); do
+      for file in $(find turb micro conv aux cmake -type f); do
         mvdiff $file ../$file
       done
+      file=CMakeLists.txt; [ -f $file ] && mvdiff $file ../$file
       cd ..
       rm -rf PHYEX
     else
       #Move PHYEX source files
-      for rep in turb micro conv aux; do
+      for rep in turb micro conv aux cmake; do
         [ -d PHYEX/$rep ] && mv PHYEX/$rep .
       done
+      file=PHYEX/CMakeLists.txt; [ -f $file ] && mv $file .
     fi
     #modd_nsv.F90 has been moved and gmkpack is lost in case a different version exists in main/.../micro
     if [ -f ../../main/phyex/micro/modd_nsv.F90 -a -f aux/modd_nsv.F90 ]; then
