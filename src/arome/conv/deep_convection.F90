@@ -105,7 +105,8 @@ USE MODD_CONVPAREXT
 USE MODD_CONVPAR
 USE MODD_NSV,       ONLY : NSV_LGBEG,NSV_LGEND, &
                            NSV_LNOXBEG
-USE MODI_CH_CONVECT_LINOX
+!chemistry to be rephased
+!USE MODI_CH_CONVECT_LINOX
 !USE MODE_CONVECT_CHEM_TRANSPORT, ONLY: CONVECT_CHEM_TRANSPORT
 USE MODE_MSG, ONLY: PRINT_MSG, NVERB_FATAL
 !
@@ -1035,13 +1036,15 @@ IF ( ICONV1 > 0 )  THEN
     IF ((ODUST .AND.  OCH_CONV_SCAV).OR.&
         (OSALT .AND.  OCH_CONV_SCAV)  ) THEN
 !
-      CALL CH_CONVECT_SCAVENGING( ICONV, KLEV, KCH1, ZCH1, ZCH1C,      &
-                                  IDPL, IPBL, ILCL, ICTL, ILFS, IDBL,  &
-                                  ZUMF, ZUER, ZUDR, ZDMF, ZDER, ZDDR,  &
-                                  ZTIMEC, ZDXDY, ZMIXF, ZLMASS, ZWSUB, &
-                                  IFTSTEPS,                            &
-                                  ZURC, ZURR, ZURI, ZURS, ZUTT, ZPRES, &
-                                  ZRHODREF                             )
+! chemistry to be rephased
+       CALL PRINT_MSG(NVERB_FATAL, 'GEN', 'call to CH_CONVECT_SCAVENGING needs rephasing: breaks independence of phyex')
+!      CALL CH_CONVECT_SCAVENGING( ICONV, KLEV, KCH1, ZCH1, ZCH1C,      &
+!                                  IDPL, IPBL, ILCL, ICTL, ILFS, IDBL,  &
+!                                  ZUMF, ZUER, ZUDR, ZDMF, ZDER, ZDDR,  &
+!                                  ZTIMEC, ZDXDY, ZMIXF, ZLMASS, ZWSUB, &
+!                                  IFTSTEPS,                            &
+!                                  ZURC, ZURR, ZURI, ZURS, ZUTT, ZPRES, &
+!                                  ZRHODREF                             )
 !
       IF (OCH_CONV_LINOX) THEN
         ZCH1C(:,:,JN_NO) = ZWORK4C(:,:)

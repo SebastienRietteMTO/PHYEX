@@ -10,7 +10,7 @@ INTERFACE
                                 KCLTOP, KCLBAS, PPRLFLX, PPRSFLX,              &
                                 PUMF, PDMF, PCAPE,                             &
                                 OCH1CONV, KCH1, PCH1, PCH1TEN,                 &
-                                OUSECHEM, OCH_CONV_SCAV, OCH_CONV_LINOX,       &
+                                OCH_CONV_SCAV, OCH_CONV_LINOX,       &
                                 ODUST, OSALT, PRHODREF, PIC_RATE, PCG_RATE     )
 !
 !
@@ -78,7 +78,6 @@ LOGICAL,                    INTENT(IN) :: OCH1CONV ! include tracer transport
 INTEGER,                    INTENT(IN) :: KCH1     ! number of species
 REAL, DIMENSION(KLON,KLEV,KCH1), INTENT(IN) :: PCH1! grid scale chemical species
 REAL, DIMENSION(KLON,KLEV,KCH1), INTENT(INOUT):: PCH1TEN! species conv. tendency (1/s)
-LOGICAL,                    INTENT(IN) :: OUSECHEM      ! flag for chemistry
 LOGICAL,                    INTENT(IN) :: OCH_CONV_SCAV !  & scavenging
 LOGICAL,                    INTENT(IN) :: OCH_CONV_LINOX ! & LiNOx
 LOGICAL,                    INTENT(IN) :: ODUST         ! flag for dust

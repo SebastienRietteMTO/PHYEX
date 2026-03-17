@@ -29,9 +29,13 @@ def pybinding(fortran_in, scope, fortran_out, python_out, libso,
     :param fortran_out: FORTRAN output file
     :param python_out: python output file
     :param libso: path to the shared lib (relative to the python_out file)
+                  or list of possible paths
     :param tpfileIsNam: True if tpfile is a namelist
     :param Findexing: True to keep the same index order as in the FORTRAN subroutine
     """
+
+    if isinstance(libso, str):
+        libso = [libso]
 
     def findcomponents(bound):
         """
@@ -107,6 +111,19 @@ def pybinding(fortran_in, scope, fortran_out, python_out, libso,
             copyList.append('D%NIEC=NIT')
             copyList.append('D%NJEC=1')
             argList2.append('D')
+        elif vartype == 'TYPE(PHYEX_AERO_T)':
+            moduleList.append('USE MODD_PHYEX_AERO, ONLY: PHYEX_AERO_t')
+            moduleList.append('USE MODD_SALT, ONLY: LSALT, NMODE_SLT, XINISIG_SLT, ' +
+                              'CRGUNITS, XINIRADIUS_SLT')
+            moduleList.append('USE MODD_CSTS_SALT, ONLY: XDENSITY_SALT')
+            declList.append('TYPE(PHYEX_AERO_t) :: PHYAERO')
+            copyList.append('PHYAERO%LSALT         = LSALT')
+            copyList.append('PHYAERO%NMODE_SLT     = NMODE_SLT')
+            copyList.append('PHYAERO%XINISIG_SLT   => XINISIG_SLT')
+            copyList.append('PHYAERO%CRGUNITS      = CRGUNITS')
+            copyList.append('PHYAERO%XINIRADIUS_SLT=> XINIRADIUS_SLT')
+            copyList.append('PHYAERO%XDENSITY_SALT = XDENSITY_SALT')
+            argList2.append('PHYAERO')
         elif vartype in ['TYPE(NSV_T)',]:
             moduleList.append('USE MODD_' + vartype[5:-3] + ', ONLY: T' + vartype[5:-3])
             declList.append('INTEGER, INTENT(IN) :: NSV')
@@ -331,6 +348,7 @@ def pybinding(fortran_in, scope, fortran_out, python_out, libso,
             f.write('import ctypesForFortran\n')
             f.write('from ctypesForFortran import string2array, array2string\n')
             f.write('import sys\n')
+            f.write('import os\n')
             f.write('from functools import lru_cache\n')
             f.write('\n')
             f.write('IN = ctypesForFortran.IN\n')
@@ -339,8 +357,13 @@ def pybinding(fortran_in, scope, fortran_out, python_out, libso,
             f.write('MISSING = ctypesForFortran.MISSING\n')
             f.write('MAO = ctypesForFortran.MANDATORY_AFTER_OPTIONAL\n')
             f.write('\n')
-            libso = os.path.join(os.path.dirname(os.path.realpath(python_out)), libso)
-            f.write(f'ctypesFF, handle = ctypesForFortran.ctypesForFortranFactory("{libso}")\n')
+            f.write('ctypesFF = None\n')
+            for libsoname in libso:
+                libsoname = os.path.join(os.path.dirname(os.path.realpath(python_out)), libsoname)
+                f.write(f'if ctypesFF is None and os.path.exists("{libsoname}"):\n')
+                f.write(f'    ctypesFF, handle = ctypesForFortran.ctypesForFortranFactory("{libsoname}")\n')
+            f.write('if ctypesFF is None:\n')
+            f.write(f'    raise IOError("Shared lib is missing (tested path are: {", ".join(libso)}).")\n')
             f.write('\n')
             f.write('def close():\n')
             f.write('    ctypesForFortran.dlclose(handle)\n')
@@ -461,7 +484,7 @@ if __name__ == '__main__':
                         help='FORTRAN output file')
     parser.add_argument('PYTHON', type=str,
                         help='PYTHON output file')
-    parser.add_argument('LIBSO', type=str,
+    parser.add_argument('LIBSO', type=str, nargs='+',
                         help='Shared lib path')
     parser.add_argument('--Findexing', default=False, action='store_true',
                         help='If set, array indexes are in the same order as the FORTRAN routine')

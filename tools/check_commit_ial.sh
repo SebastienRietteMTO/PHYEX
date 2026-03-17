@@ -97,10 +97,12 @@ if [ $(hostname | cut -c 1-7) == 'belenos' -o $(hostname | cut -c 1-7) == 'taran
   gmkpack_l[49t0]=IMPIIFC2018
   gmkpack_l[49t2]=IMPIIFCI2302DP
   gmkpack_l[50t1]=IMPIIFCI2302REPRODP
+  gmkpack_l[50t2]=PHYEX50T2ifort
   gmkpack_o[default]=2y
   gmkpack_o[49t0]=x
   gmkpack_o[49t2]=y
   gmkpack_o[50t1]=y
+  gmkpack_o[50t2]=sp
   defaultMainPackVersion=01
   defaultRef='split_${cycle}'
   ALLTests="${ALLTests},big_3D"
@@ -111,10 +113,12 @@ else
   gmkpack_l[49t0]=OMPIGFORT920DBL
   gmkpack_l[49t2]=OMPIGFORT920DBL
   gmkpack_l[50t1]=OMPI5GFORT141DP50
+  gmkpack_l[50t2]=PHYEX50T2gfort
   gmkpack_o[default]=xfftw
   gmkpack_o[49t0]=x
   gmkpack_o[49t2]=x
   gmkpack_o[50t1]=x
+  gmkpack_o[50t2]=dp
   defaultMainPackVersion=01
   defaultRef='split_${cycle}'
 fi
@@ -175,7 +179,7 @@ function usage {
   echo "The -f flag (full recompilation) is active only at pack creation"
   echo
   echo "The PHYEXROOTPACK environment variable, if set, is used as the argument"
-  echo "of the --rootpack option of ial-git2pack, for incremental packs."
+  echo "of the --rootpack option of ial-git2pack/ial-to_pack, for incremental packs."
 }
 
 packcreation=0
@@ -460,9 +464,14 @@ if [ $packcreation -eq 1 ]; then
 
     export GMKTMP=/dev/shm
 
-    if [ $cycle == '49t2' -o $cycle == '50t1' ]; then
-      if ! which ial-git2pack > /dev/null 2>&1; then
-        echo "ial-git2pack not found, please install it"
+    if [ $cycle == '49t2' -o $cycle == '50t1' -o $cycle == '50t2' ]; then
+      if [ $cycle == '49t2' -o $cycle == '50t1' ]; then      
+        ialcmd=ial-git2pack
+      else
+        ialcmd=ial-to_pack
+      fi
+      if ! which $ialcmd > /dev/null 2>&1; then
+        echo "$ialcmd not found, please install it"
         exit 7
       fi
       #Pack creation using ial-git2pack
@@ -483,10 +492,10 @@ if [ $packcreation -eq 1 ]; then
       else
         kind=main
       fi
-      echo y | ial-git2pack -l ${gmkpack_l} -o ${gmkpack_o} -t $kind -n 10 \
-                            -r $tmpbuilddir/IAL -p masterodb \
-                            $ROOTPACKopt \
-                            --homepack $tmpbuilddir/pack $IALbundle_tag
+      echo y | $ialcmd -l ${gmkpack_l} -o ${gmkpack_o} -t $kind -n 10 \
+                       -r $tmpbuilddir/IAL -p masterodb \
+                       $ROOTPACKopt \
+                       --homepack $tmpbuilddir/pack $IALbundle_tag
 
       #Moving
       oldname=$(echo $tmpbuilddir/pack/*)
@@ -518,10 +527,22 @@ if [ $packcreation -eq 1 ]; then
         rm -rf src/local/oopsifs
         rm -rf hub/local/src/Atlas hub/local/src/OOPS
       fi
+      if [ $cycle == '50t2' -a "$kind" == 'main' ]; then
+        #Workarounds for 50t2 compilation: update falfilfa to relax eccodes version check
+        #Only needed on SIRES computer, latest eccode version is available on HPC
+        cd hub/local/src/FALFILFA/falfilfa
+        git cherry-pick 15359c1
+        cd $HOMEPACK/$name
+      fi
 
       #Prepare PHYEX inclusion
-      rm -rf src/local/phyex
-      mkdir src/local/phyex
+      if [ $cycle == '49t2' -o $cycle == '50t1' ]; then
+        rm -rf src/local/phyex
+        mkdir src/local/phyex
+      else
+        rm -rf hub/local/src/PHYEX/phyex
+        mkdir -p hub/local/src/PHYEX/phyex
+      fi
 
     elif [ $fullcompilation == 0 ]; then
       #Incremental compilation old style
@@ -612,157 +633,177 @@ if [ $packcreation -eq 1 ]; then
   fi
 fi
 if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
-  if [ ! -d $HOMEPACK/$name/src/local/phyex ]; then
+  subs="-s gmkpack_ignored_files -s turb -s micro -s aux -s ext -s conv -s externals" #externals is the old name for aux/ext
+  if [ -d $HOMEPACK/$name/hub/local/src/PHYEX/phyex ]; then
+    cd $HOMEPACK/$name/hub/local/src/PHYEX/phyex
+    subs="$subs -s CMakeLists.txt -s cmake"
+  elif [ ! -d $HOMEPACK/$name/src/local/phyex ]; then
     echo "phyex directory doesn't exist in pack ($HOMEPACK/$name)"
     exit 7
   else
     cd $HOMEPACK/$name/src/local/phyex
+  fi
 
-    if [ $useexpand == 1 ]; then
-      expand_options="--mnhExpand"
+  if [ $useexpand == 1 ]; then
+    expand_options="--mnhExpand"
+  else
+    expand_options=""
+  fi
+  prep_code=$PHYEXTOOLSDIR/prep_code.sh
+  if [ "$fromdir" == '' ]; then
+    echo "Clone repository, and checkout commit $commit (using prep_code.sh)"
+    if [[ $commit == arome${separator}* ]]; then
+      $prep_code $prepCodeOpts -c $commit PHYEX #This commit is ready for inclusion
     else
-      expand_options=""
+      $prep_code $prepCodeOpts -c $commit $subs -m arome PHYEX -- --shumanFUNCtoCALL --removeACC $expand_options
     fi
-    subs="-s gmkpack_ignored_files -s turb -s micro -s aux -s ext -s conv -s externals" #externals is the old name for aux/ext
-    prep_code=$PHYEXTOOLSDIR/prep_code.sh
-    if [ "$fromdir" == '' ]; then
-      echo "Clone repository, and checkout commit $commit (using prep_code.sh)"
-      if [[ $commit == arome${separator}* ]]; then
-        $prep_code $prepCodeOpts -c $commit PHYEX #This commit is ready for inclusion
-      else
-        $prep_code $prepCodeOpts -c $commit $subs -m arome PHYEX -- --shumanFUNCtoCALL --removeACC $expand_options
-      fi
+  else
+    echo "Copy $fromdir"
+    mkdir PHYEX
+    if [ -d $fromdir/src ]; then
+      scp -q -r $fromdir/src PHYEX/
+      $prep_code $prepCodeOpts $subs -m arome PHYEX -- --shumanFUNCtoCALL --removeACC $expand_options
     else
-      echo "Copy $fromdir"
-      mkdir PHYEX
-      if [ -d $fromdir/src ]; then
-        scp -q -r $fromdir/src PHYEX/
-        $prep_code $prepCodeOpts $subs -m arome PHYEX -- --shumanFUNCtoCALL --removeACC $expand_options
-      else
-        scp -q -r $fromdir/* PHYEX/
-        $prep_code $prepCodeOpts PHYEX #Ready for inclusion
-      fi
+      scp -q -r $fromdir/* PHYEX/
+      $prep_code $prepCodeOpts PHYEX #Ready for inclusion
     fi
-    find PHYEX -type f -exec touch {} \; #to be sure a recompilation occurs
-    if [ $packupdate -eq 1 ]; then
-      #Update only modified files
-      cd PHYEX
-      for file in $(find turb micro conv aux -type f); do
-        mvdiff $file ../$file
-      done
-      cd ..
-      rm -rf PHYEX
-    else
-      #Move PHYEX source files
-      for rep in turb micro conv aux; do
-        [ -d PHYEX/$rep ] && mv PHYEX/$rep .
-      done
-    fi
-    #modd_nsv.F90 has been moved and gmkpack is lost in case a different version exists in main/.../micro
-    if [ -f ../../main/phyex/micro/modd_nsv.F90 -a -f aux/modd_nsv.F90 ]; then
-      mvdiff aux/modd_nsv.F90 micro/
-      if [ -f PHYEX/gmkpack_ignored_files ]; then
-        grep -v micro/modd_nsv.F90 PHYEX/gmkpack_ignored_files > PHYEX/gmkpack_ignored_files_new
-        mv PHYEX/gmkpack_ignored_files_new PHYEX/gmkpack_ignored_files
-      fi
-    fi
-    #shuman_phy.F90 has been renamed and gmkpack is lost in case a different version exists in main
-    if [ -f ../../main/phyex/aux/shuman_phy.F90 -a -f aux/mode_shuman_phy.F90 ]; then
-      mv aux/mode_shuman_phy.F90 aux/shuman_phy.F90
-    fi
-    if [ -f PHYEX/gmkpack_ignored_files ]; then
-      #gmkpack_ignored_files contains a list of file, present in the reference pack, that is not used anymore
-      #and must be excluded from compilation (in case of a full comilation) or from re-compilation (in case of a non-full
-      #compilation).
-      if [ $fullcompilation == 0 ]; then
-        #Content is added in the ics_masterodb script
-        if [ $packupdate -eq 0 ]; then
-          if [ $(cat PHYEX/gmkpack_ignored_files | wc -l) != 0 ]; then
-            sed -i "/^end_of_ignored_files/i $(first=1; for line in $(cat PHYEX/gmkpack_ignored_files); do echo -n $(test $first -ne 1 && echo \\n)${line}; first=0; done)" $HOMEPACK/$name/ics_masterodb
-          fi
-        fi
-      else
-        #Files must be suppressed (non phyex files)
-        for file in $(cat PHYEX/gmkpack_ignored_files); do
-          [ -f $HOMEPACK/$name/src/local/$file ] && rm -f $HOMEPACK/$name/src/local/$file
-        done
-        if [ -d $HOMEPACK/$name/src/local/mpa/dummy ]; then
-          [ ! "$(ls -A $HOMEPACK/$name/src/local/mpa/dummy)" ] && rmdir $HOMEPACK/$name/src/local/mpa/dummy
-        fi
-      fi
-    fi
-
-    EXT=PHYEX/ext
-    [ ! -d $EXT ] && EXT=PHYEX/externals #old name for ext/aux
-    if [ -d $EXT ]; then
-      #Move manually files outside of mpa (a find on the whole repository would take too much a long time)
-      for file in yomparar.F90 cpg_opts_type_mod.fypp field_variables_mod.fypp cpg_type_mod.fypp \
-                  field_registry_mod.fypp mf_phys_next_state_type_mod.fypp yemlbc_model.F90 \
-                  field_config.yaml field_definitions.F90 field_gfl_wrapper.F90 \
-                  yomfa.F90 yom_ygfl.F90 type_gflflds.F90 mf_phys_base_state_type_mod.fypp; do
-        [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/module/
-      done
-      for file in namparar.nam.h namlima.nam.h namgfl.nam.h; do
-        [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/namelist/
-      done
-      for file in aplpar.F90 acvppkf.F90 writemusc.F90 vdfhghtnhl.F90 suphmse.F90 suphmpa.F90 \
-                  suparar.F90 apl_arome.F90 apl_arome_adjust.F90 apl_arome_micro.F90 \
-                  apl_arome_shallow.F90 apl_arome_turbulence.F90; do
-        [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/phys_dmn/
-      done
-      for file in cpg_pt_ulp_expl.fypp cpg_gp.F90; do
-        [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/adiab/
-      done
-      for file in su0yomb.F90 suctrl_gflattr.F90 sudefo_gflattr.F90 sufa.F90 sugfl1.F90 sugfl2.F90 \
-                  sugfl3.F90; do
-        [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/setup/
-      done
-      for file in vpos_prep.F90; do
-        [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/fullpos/
-      done
-      if [ $cycle == '49t2' ]; then
-        file=$EXT/arp_shallow_mf.F90; [ -f $file ] && mvdiff $file ../arpifs/phys_dmn/
-      fi
-      #Special mpa case
-      [ -f $EXT/modd_ch_aerosol.F90 ] && mvdiff $EXT/modd_ch_aerosol.F90 ../mpa/chem/module/modd_ch_aerosol.F90
-      for file in modd_spp_type.F90 spp_mod_type.F90 aroini_conf.h aroini_conf.F90; do
-        if [ -f $EXT/$file ]; then
-          [ ! -d ../mpa/aux ] && mkdir ../mpa/aux
-          mvdiff $EXT/$file ../mpa/aux/
-        fi
-      done
-      [ -d $EXT/dead_code ] && rm -rf $EXT/dead_code/
-      if [ $EXT == "PHYEX/externals" ]; then
-        mv $EXT .
-      else
-        #Move automatically all codes under mpa
-        if [ -d $HOMEPACK/$name/src/main ]; then
-          #if main exists this is not a main pack (because it references a main pack)
-          reftree='main'
-        else
-          reftree='local'
-        fi
-        if [ ! -z "$(\ls $EXT)" ]; then
-          #$EXT is not empty
-          if [ $cycle == '50t1' ]; then
-          for file in aro_turb_mnh.F90 aro_shallow_mf.F90 arp_shallow_mf.F90; do
-            [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/phys_dmn/
-          done
-          fi
-          for file in $EXT/*; do
-            extname=`basename $file`
-            loc=`find ../../$reftree/mpa/ -name $extname | sed "s/\/$reftree\//\/local\//g"`
-            nb=`echo $loc | wc -w`
-            if [ $nb -ne 1 ]; then
-              echo "Don't know where $file must be moved, none or several places found!"
-              exit 9
-            fi
-            mvdiff $file $loc
-          done
-        fi
-      fi
-    fi
+  fi
+  find PHYEX -type f -exec touch {} \; #to be sure a recompilation occurs
+  if [ $packupdate -eq 1 ]; then
+    #Update only modified files
+    cd PHYEX
+    for file in $(find turb micro conv aux cmake -type f); do
+      mvdiff $file ../$file
+    done
+    file=CMakeLists.txt; [ -f $file ] && mvdiff $file ../$file
+    cd ..
     rm -rf PHYEX
+  else
+    #Move PHYEX source files
+    for rep in turb micro conv aux cmake; do
+      [ -d PHYEX/$rep ] && mv PHYEX/$rep .
+    done
+    file=PHYEX/CMakeLists.txt; [ -f $file ] && mv $file .
+  fi
+  #modd_nsv.F90 has been moved and gmkpack is lost in case a different version exists in main/.../micro
+  if [ -f ../../main/phyex/micro/modd_nsv.F90 -a -f aux/modd_nsv.F90 ]; then
+    mvdiff aux/modd_nsv.F90 micro/
+    if [ -f PHYEX/gmkpack_ignored_files ]; then
+      grep -v micro/modd_nsv.F90 PHYEX/gmkpack_ignored_files > PHYEX/gmkpack_ignored_files_new
+      mv PHYEX/gmkpack_ignored_files_new PHYEX/gmkpack_ignored_files
+    fi
+  fi
+  #shuman_phy.F90 has been renamed and gmkpack is lost in case a different version exists in main
+  if [ -f ../../main/phyex/aux/shuman_phy.F90 -a -f aux/mode_shuman_phy.F90 ]; then
+    mv aux/mode_shuman_phy.F90 aux/shuman_phy.F90
+  fi
+  if [ -f PHYEX/gmkpack_ignored_files ]; then
+    #gmkpack_ignored_files contains a list of file, present in the reference pack, that is not used anymore
+    #and must be excluded from compilation (in case of a full comilation) or from re-compilation (in case of a non-full
+    #compilation).
+    if [ $fullcompilation == 0 ]; then
+      #Content is added in the ics_masterodb script
+      if [ $packupdate -eq 0 ]; then
+        if [ $(cat PHYEX/gmkpack_ignored_files | wc -l) != 0 ]; then
+          sed -i "/^end_of_ignored_files/i $(first=1; for line in $(cat PHYEX/gmkpack_ignored_files); do echo -n $(test $first -ne 1 && echo \\n)${line}; first=0; done)" $HOMEPACK/$name/ics_masterodb
+        fi
+      fi
+    else
+      #Files must be suppressed (non phyex files)
+      for file in $(cat PHYEX/gmkpack_ignored_files); do
+        [ -f $HOMEPACK/$name/src/local/$file ] && rm -f $HOMEPACK/$name/src/local/$file
+      done
+      if [ -d $HOMEPACK/$name/src/local/mpa/dummy ]; then
+        [ ! "$(ls -A $HOMEPACK/$name/src/local/mpa/dummy)" ] && rmdir $HOMEPACK/$name/src/local/mpa/dummy
+      fi
+    fi
+  fi
+
+  EXT=PHYEX/ext
+  [ ! -d $EXT ] && EXT=PHYEX/externals #old name for ext/aux
+  if [ -d $EXT ]; then
+    #Move manually files outside of mpa (a find on the whole repository would take too much a long time)
+    for file in yomparar.F90 cpg_opts_type_mod.fypp field_variables_mod.fypp cpg_type_mod.fypp \
+                field_registry_mod.fypp mf_phys_next_state_type_mod.fypp yemlbc_model.F90 \
+                field_config.yaml field_definitions.F90 field_gfl_wrapper.F90 \
+                yomfa.F90 yom_ygfl.F90 type_gflflds.F90 mf_phys_base_state_type_mod.fypp; do
+      [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/module/
+    done
+    for file in namparar.nam.h namlima.nam.h namgfl.nam.h; do
+      [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/namelist/
+    done
+    for file in aplpar.F90 acvppkf.F90 writemusc.F90 vdfhghtnhl.F90 suphmse.F90 suphmpa.F90 \
+                suparar.F90 apl_arome.F90 apl_arome_adjust.F90 apl_arome_micro.F90 \
+                apl_arome_shallow.F90 apl_arome_turbulence.F90; do
+      [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/phys_dmn/
+    done
+    for file in cpg_pt_ulp_expl.fypp cpg_gp.F90; do
+      [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/adiab/
+    done
+    for file in su0yomb.F90 suctrl_gflattr.F90 sudefo_gflattr.F90 sufa.F90 sugfl1.F90 sugfl2.F90 \
+                sugfl3.F90; do
+      [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/setup/
+    done
+    for file in vpos_prep.F90; do
+      [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/fullpos/
+    done
+    if [ $cycle == '49t2' ]; then
+      file=$EXT/arp_shallow_mf.F90; [ -f $file ] && mvdiff $file ../arpifs/phys_dmn/
+    fi
+    #Special mpa case
+    [ -f $EXT/modd_ch_aerosol.F90 ] && mvdiff $EXT/modd_ch_aerosol.F90 ../mpa/chem/module/modd_ch_aerosol.F90
+    for file in modd_spp_type.F90 spp_mod_type.F90 aroini_conf.h aroini_conf.F90; do
+      if [ -f $EXT/$file ]; then
+        [ ! -d ../mpa/aux ] && mkdir ../mpa/aux
+        mvdiff $EXT/$file ../mpa/aux/
+      fi
+    done
+    [ -d $EXT/dead_code ] && rm -rf $EXT/dead_code/
+    if [ $EXT == "PHYEX/externals" ]; then
+      mv $EXT .
+    else
+      #Move automatically all codes under mpa
+      if [ -d $HOMEPACK/$name/src/main ]; then
+        #if main exists this is not a main pack (because it references a main pack)
+        reftree='main'
+      else
+        reftree='local'
+      fi
+      if [ ! -z "$(\ls $EXT)" ]; then
+        #$EXT is not empty
+        if [ $cycle == '50t1' ]; then
+        for file in aro_turb_mnh.F90 aro_shallow_mf.F90 arp_shallow_mf.F90; do
+          [ -f $EXT/$file ] && mvdiff $EXT/$file ../arpifs/phys_dmn/
+        done
+        fi
+        for file in $EXT/*; do
+          extname=`basename $file`
+          loc=`find ../../$reftree/mpa/ -name $extname | sed "s/\/$reftree\//\/local\//g"`
+          nb=`echo $loc | wc -w`
+          if [ $nb -ne 1 ]; then
+            echo "Don't know where $file must be moved, none or several places found!"
+            exit 9
+          fi
+          mvdiff $file $loc
+        done
+      fi
+    fi
+  fi
+  rm -rf PHYEX
+
+  if [ -d $HOMEPACK/$name/hub/local/src/PHYEX/phyex -a -d $HOMEPACK/$name/src/main ]; then
+    # Incremental pack with updated Hub, we must put, in src/local, the files using
+    # PHYEX to force a re-compilation
+    cd $HOMEPACK/$name/src
+
+    for file in main/mpa/conv/externals/aro_conv_mnh.F90 \
+                main/arpifs/phys_dmn/suphmpa.F90 \
+                $(grep -l -i -e phyex_t -e modd_nsv $(find main/mpa main/arpifs -name \*.F90 -o -name \*.h)); do
+      localfile=$(echo $file | sed 's;^main/;local/;')
+      if [ ! -f $localfile ]; then
+        cp $file $localfile
+      fi
+    done
   fi
 fi
 
@@ -781,21 +822,25 @@ if [ $compilation -eq 1 ]; then
     exescript Output_compilation ics_masterodb
     if [ -f bin/MASTERODB \
          -a $(grep Error Output_compilation | \
+              grep -v ErrorCovariance3D | \
               grep -v TestErrorHandler | \
+              grep -v instantiateObsErrorFactory | \
               grep -v "'Error" | \
               grep -v "'CPLNG: Error" | \
               grep -v '"Error' | \
               grep -v "'*** Error" | \
               grep -v "\-\- Up-to-date:" | wc -l) -ne 0 ]; then
-      echo "MASTERODB was produced but errors occured during compilation:"
+      echo "check_commit_ial: MASTERODB was produced but errors occured during compilation:"
       grep Error Output_compilation | \
+            grep -v ErrorCovariance3D | \
             grep -v TestErrorHandler | \
+            grep -v instantiateObsErrorFactory | \
             grep -v "'Error" | \
             grep -v "'CPLNG: Error" | \
             grep -v '"Error' | \
             grep -v "'*** Error" | \
             grep -v "\-\- Up-to-date:"
-      echo "MASTERODB suppressed!"
+      echo "check_commit_ial: MASTERODB suppressed!"
       rm -f bin/MASTERODB
       exit 12
     fi
@@ -896,7 +941,7 @@ if [ $check -eq 1 ]; then
 
       #Files to compare
       if echo $t | grep 'small' > /dev/null; then
-        if [ $cycle == '49t2' -o $cycle == '50t1' ]; then
+        if [ $cycle == '49t2' -o $cycle == '50t1' -o $cycle == '50t2' ]; then
           filestocheck="$filestocheck ${t},conf_tests/$t/ICMSHFPOS+0002:00"
         else
           filestocheck="$filestocheck ${t},conf_tests/$t/ICMSHFPOS+0002:00 ${t},conf_tests/$t/DHFDLFPOS+0002"
