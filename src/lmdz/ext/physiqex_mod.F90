@@ -52,6 +52,7 @@ CONTAINS
       USE MODI_RAIN_ICE, ONLY: RAIN_ICE
       USE MODI_TURB
       USE MODI_SHALLOW_MF
+      USE FLUX_ARP_MOD_H
       IMPLICIT none
 !
 ! Routine argument:
@@ -81,7 +82,6 @@ CONTAINS
       real :: d_tke(klon, klev)
 
 !    include "clesphys.h"
-    include "flux_arp.h"
 
     INTEGER        length
     PARAMETER    ( length = 100 )

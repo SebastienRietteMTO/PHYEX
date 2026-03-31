@@ -57,7 +57,7 @@ if(debut)then
    call getin_p("iwrite_phys",iwrite_phys)
 
    !$OMP MASTER
-   CALL iophys_ini(pdtphys)
+   CALL iophys_ini(pdtphys,klev)
    !$OMP END MASTER
    !$OMP BARRIER
 

@@ -233,6 +233,7 @@ if [ $packcreation -eq 1 ]; then
   cat - <<EOF > arch-mylocal.fcm
 %COMPILER            gfortran
 %LINK                gfortran
+%FPP                 cpp
 %AR                  ar
 %ARFLAGS             rU
 %MAKE                make
@@ -366,8 +367,9 @@ if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
   #Missing files in case ecrad is not used
   if [ $packupdate -eq 0 ]; then
     if [ "$rad" != "ecrad" ] ; then
-      for file in ecrad/yom* ecrad/abor1.F90 ecrad/abor1.intfb.h ecrad/parkind1.F90; do
-        [ ! -f $(basename $file) ] && ln -s $file .
+      for file in ecrad/yom* ecrad/abor1.F90 ecrad/abor1.intfb.h ecrad/parkind1.F90 \
+                  ecrad/*/yom* ecrad/*/abor1.F90 ecrad/*/abor1.intfb.h ecrad/*/parkind1.F90; do
+        [ -f "$file" -a ! -f "$(basename $file)" ] && ln -s $file .
       done
     fi
   fi
