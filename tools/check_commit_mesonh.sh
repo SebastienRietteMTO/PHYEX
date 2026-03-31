@@ -338,7 +338,10 @@ if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
     [ -f PHYEX/ext/yomhook.f90 ] && mv PHYEX/ext/yomhook.f90 PHYEX/ext/yomhook.F90
     if [ -d PHYEX/ext ]; then
       for file in PHYEX/ext/*; do
-        mvdiff $file MNH/
+        if [ -d ACLIB ]; then
+          [ $file = PHYEX/ext/modd_salt.f90 ] && mvdiff $file ACLIB/aux/
+        fi
+        [ -f $file ] && mvdiff $file MNH/ # Not an ACLIB file
       done
       if [ $packupdate -eq 1 ]; then
         #Only modified files are moved

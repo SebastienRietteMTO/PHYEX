@@ -1,6 +1,7 @@
 SUBROUTINE INI_PHYEX(HPROGRAM, TPFILE, LDNEEDNAM, KLUOUT, KFROM, KTO, &
                     &PTSTEP, PDZMIN, &
                     &CMICRO, CSCONV, CTURB, &
+                    &PHYAERO, &
                     &LDCHANGEMODEL, LDDEFAULTVAL, LDREADNAM, LDCHECK, &
                     &KPRINT, LDINIT, &
                     &PHYEX_IN, PHYEX_OUT)
@@ -33,7 +34,11 @@ SUBROUTINE INI_PHYEX(HPROGRAM, TPFILE, LDNEEDNAM, KLUOUT, KFROM, KTO, &
 !  An alternative to this solution is not to copy the variable inside a PHYEX module but add it directly
 !  to the parametrisation call arguments.
 !
+USE PARKIND1, ONLY: JPRB
+USE MODD_PRECISION, ONLY: MNHREAL
+!
 USE MODD_PHYEX, ONLY: PHYEX_t
+USE MODD_PHYEX_AERO, ONLY: PHYEX_AERO_t
 USE MODD_CST, ONLY: CST, PRINT_CST
 USE MODD_PARAM_ICE_n, ONLY: PARAM_ICE_GOTO_MODEL, PARAM_ICEN_INIT, PARAM_ICEN, &
                           & CSUBG_AUCV_RC, CSUBG_AUCV_RI
@@ -107,6 +112,7 @@ INTEGER, OPTIONAL, INTENT(IN) :: KPRINT       !< Print level (defaults to 0): 0 
 LOGICAL, OPTIONAL, INTENT(IN) :: LDINIT       !< Must we call the init routines
 TYPE(PHYEX_t), OPTIONAL, INTENT(IN)    :: PHYEX_IN    !< Structure for constants (IN)
 TYPE(PHYEX_t), OPTIONAL, INTENT(INOUT) :: PHYEX_OUT   !< Structure for constants (OUT)
+TYPE(PHYEX_AERO_t), OPTIONAL, INTENT(INOUT) :: PHYAERO  !< Aerosol properties
 
 !IMPORTANT NOTE on PHYEX_OUT arguments.
 !Logically this argument should be declared with INTENT(OUT) but in this case ifort (at least) breaks the
@@ -115,6 +121,7 @@ TYPE(PHYEX_t), OPTIONAL, INTENT(INOUT) :: PHYEX_OUT   !< Structure for constants
 
 LOGICAL :: LLINIT, LLCHANGEMODEL, LLCHECK
 INTEGER :: IPRINT
+REAL :: Z_DEFAULT_KIND
 !
 !**       ARGUMENTS
 !
@@ -126,6 +133,16 @@ LLCHANGEMODEL=.TRUE.
 IF(PRESENT(LDCHANGEMODEL)) LLCHANGEMODEL=LDCHANGEMODEL
 IPRINT=0
 IF(PRESENT(KPRINT)) IPRINT=KPRINT
+!
+!**       PRECISION CHECK
+!
+IF(KIND(Z_DEFAULT_KIND) /= JPRB .OR. KIND(Z_DEFAULT_KIND) /= MNHREAL) THEN 
+  PRINT*, "Inconsistent compilation option" 
+  PRINT*, "  PARKIND1 has been compiled with kind=", JPRB 
+  PRINT*, "  MODD_PRECISION has been compiled with kind=", MNHREAL
+  PRINT*, "  PHYEX has been compiled with kind=", KIND(Z_DEFAULT_KIND) 
+  CALL PRINT_MSG(NVERB_FATAL, 'GEN', 'INI_PHYEX', "Inconsistent compilation option")
+ENDIF
 !
 !**       CST
 !
@@ -177,7 +194,11 @@ IF(CMICRO=='ICE3' .OR. CMICRO=='ICE4' .OR. CMICRO=='LIMA') THEN
     CALL INI_TIWMX
     RAIN_ICE_PARAMN%TIWMX=>TIWMX
     IF(CMICRO=='LIMA') THEN
-      CALL INIT_AEROSOL_PROPERTIES
+      IF (.NOT. PRESENT(PHYAERO)) THEN
+         CALL PRINT_MSG(NVERB_FATAL, 'GEN', 'INI_PHYEX', &
+                       &"PHYAERO must be present to initialialise aerosols.")
+       ENDIF
+      CALL INIT_AEROSOL_PROPERTIES(PHYAERO)
       CALL INI_LIMA(PTSTEP, PDZMIN, CLOUDPARN%NSPLITR, CLOUDPARN%NSPLITG)
     ENDIF
   ENDIF

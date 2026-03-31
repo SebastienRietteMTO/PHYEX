@@ -50,6 +50,7 @@ LOGICAL      :: LONLY     = .FALSE.
 LOGICAL      :: LREAD_ONLY_HS_MACC     = .FALSE.
 LOGICAL      :: LSLTINIT  = .FALSE.   ! switch to initialize pronostic sea salts
 LOGICAL      :: LSLTPRES  = .FALSE.   ! switch to know if pronostic salts exist            
+LOGICAL      :: LSED2MOM_SLT = .FALSE.    ! switch to active multimoment sedimentation
 LOGICAL,DIMENSION(JPMODELMAX)  :: LDEPOS_SLT = .FALSE.    ! switch to SLT wet depositon
 
 CHARACTER(LEN=9),DIMENSION(:),ALLOCATABLE :: CDESLTNAMES
@@ -78,9 +79,9 @@ INTEGER :: NMODE_SLT= 8  ! number of sea salt modes (default = 8)
 !REAL, DIMENSION(5) :: XINIRADIUS_SLT,XINISIG_SLT,XN0MIN_SLT
 
 !Initial dry number median radius (um) from Ova et al., 2014
-REAL,DIMENSION(8)    :: XINIRADIUS_SLT=  (/0.009, 0.021, 0.045, 0.115,0.415, 2.5, 7.0, 25.0/)
+REAL,DIMENSION(8), TARGET    :: XINIRADIUS_SLT=  (/0.009, 0.021, 0.045, 0.115,0.415, 2.5, 7.0, 25.0/)
 !Initial, standard deviation from  Ova et al., 2014
-REAL,DIMENSION(8)      :: XINISIG_SLT =  (/ 1.37, 1.5, 1.42, 1.53, 1.85, 1.55, 1.8, 2.1 /)
+REAL,DIMENSION(8), TARGET      :: XINISIG_SLT =  (/ 1.37, 1.5, 1.42, 1.53, 1.85, 1.55, 1.8, 2.1 /)
 
 !Minimum allowed number concentration for any mode (#/m3)
 REAL,DIMENSION(8)  :: XN0MIN_SLT  = (/100. , 100., 100., 10., 1., 1E-2 , 1E-3, 1E-4 /)

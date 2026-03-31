@@ -464,7 +464,12 @@ if [ $run -ge 1 ]; then
           firstrun=0
         fi
 
-        if [ ! -f $TESTDIR/$name/build/with_${buildSys}/arch_${archfile}/build/bin/main_${t}.exe ]; then
+        for prec in "" _dp _sp; do
+          if [ -f $TESTDIR/$name/build/with_${buildSys}/arch_${archfile}/build/bin/main_${t}${prec}.exe ]; then
+            break
+          fi
+        done
+        if [ ! -f $TESTDIR/$name/build/with_${buildSys}/arch_${archfile}/build/bin/main_${t}${prec}.exe ]; then
           echo "Directory does not exist ($TESTDIR/$name) or compilation has failed, please check"
           echo "Run '$0 -p -c $commit' to compile."
           exit 6
@@ -482,7 +487,7 @@ if [ $run -ge 1 ]; then
         fi
         . $TESTDIR/$name/build/with_${buildSys}/arch_${archfile}/arch.env
         set +e
-        submit Output_run Stderr_run $TESTDIR/$name/build/with_${buildSys}/arch_${archfile}/build/bin/main_${t}.exe $checkOpt $extrapolation_opts
+        submit Output_run Stderr_run $TESTDIR/$name/build/with_${buildSys}/arch_${archfile}/build/bin/main_${t}${prec}.exe $checkOpt $extrapolation_opts
         stat=$?
         set -e
         if [ $stat -ne 0 ]; then

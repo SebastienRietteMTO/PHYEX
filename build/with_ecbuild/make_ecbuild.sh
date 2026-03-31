@@ -5,7 +5,7 @@ set -e
 
 . "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"/../make_util.sh
 
-ecbuild_version=tags/3.9.1
+ecbuild_version=tags/3.12.0
 
 function check_install_build_system() {
   if [ ! -f ecbuild/bin/ecbuild ]; then
@@ -37,86 +37,6 @@ function check_install_build_system() {
 
 function remove_build_system() {
   rm -rf ecbuild
-}
-
-function gmkfile2arch() {
-  GMKFILE=$1
-  ARCHFILE=$2/arch.ecbuild
-
-  echo "
-    Your are building an architecture file from a gmkfile.
-    Please note that linker (command and and arguments) are ignored; ar command is also ignored"
-
-cat <<EOF > $ARCHFILE
-# Compilation
-set(CMAKE_Fortran_COMPILER $(grep "^FRTNAME =" $GMKFILE | cut -d = -f 2))
-set(CMAKE_Fortran_FLAGS "$(grep "^FRTFLAGS =" $GMKFILE | cut -d = -f 2-) $(grep "^GMK_FCFLAGS_PHYEX =" $GMKFILE | cut -d = -f 2-)")
-set(CMAKE_Fortran_FLAGS_RELEASE "$(grep "^OPT_FRTFLAGS =" $GMKFILE | cut -d = -f 2-)")
-set(CMAKE_Fortran_FLAGS_DEBUG "$(grep "^DBG_FRTFLAGS =" $GMKFILE | cut -d = -f 2-) $(grep "^BCD_FRTFLAGS =" $GMKFILE | cut -d = -f 2-) $(grep "^NAN_FRTFLAGS =" $GMKFILE | cut -d = -f 2-)")
-set(CMAKE_C_COMPILER $(grep "^VCCNAME =" $GMKFILE | cut -d = -f 2))
-set(CMAKE_C_FLAGS "$(grep "^VCCFLAGS =" $GMKFILE | cut -d = -f 2-)")
-set(CMAKE_C_FLAGS_RELEASE "$(grep "^OPT_VCCFLAGS =" $GMKFILE | cut -d = -f 2-)")
-
-# Preprocessor
-add_compile_definitions("$<$<COMPILE_LANGUAGE:Fortran>:$(grep "^MACROS_FRT =" $GMKFILE | cut -d = -f 2-)>")
-add_compile_definitions("$<$<COMPILE_LANGUAGE:C,CXX>:$(grep "^MACROS_CC =" $GMKFILE | cut -d = -f 2-)>")
-EOF
-}
-
-function mesonhprofile2arch() {
-  MESONHPROFILE=$1
-  ARCHFILE=$2/arch.ecbuild
-  ENVFILE=$2/arch.env
-
-  echo "
-   You are trying to produce a configuration file for fcm from a Meso-NH configuration.
-   Please note that linker (command and and arguments) are ignored; ar command is also ignored
-   The resulting file is certainly incomplete and must be modified as follows:
-      Optimisation level:
-        The opt level is set in the mesonh profile file; as a consequence, the BASE_FFLAGS contains
-        the base *and* the opt flags.
-        To compile with other opt level, the profile file must be modified before executing this function.
-      Long lines:
-        Meso-NH rules does not allow the compilation of long lines. Depending on compilers, it might be needed to
-        manually add an option to allow long lines.
-        For gfortran: add '-ffree-line-length-none' to BASE_FFLAGS
-      OpenMP:
-        Meso-NH does not use OpenMP but testprogs do; as a consequence, openmp flags are not included in the
-        Meso-NH rules, they must be manually added.
-        For gfortran: add '-fopenmp' to BASE_FFLAGS and to BASE_LD
-      Position Independent Code:
-        Meso-NH does not need to build position independent code, flags must be set manually.
-        For gfortran ('-fPIC' already in BASE_FFLAGS): add '-fPIC' to BASE_CFLAGS
-      Shared lib:
-        Flags needed to build shared lib are not defined in Meso-NH rules, only hard coded in Makefile to build a
-        specific lib. The flags to set for building a shared lib, in addition to flags used to build an object, must
-        be manually set.
-        For gfortran: add '-shared' to LD_EXE_TO_SHARED
-      Swap:
-        Meso-NH rules does not swap IO byte order (litle-/big-endian). Depending on your endianess, the
-        corresponding flag may have to be set manually.
-        For gfortran: add '-fconvert=swap' to BASE_FFLAGS"
-  tac $MESONHPROFILE | grep -m1 '#' -B $(cat $MESONHPROFILE | wc -l) | tac | grep -v '#' > $ENVFILE
-  MAKEFILE='
-include Rules.$(ARCH)$(F).mk
-
-archfile :
-	echo "# Compilation"
-	echo "set(CMAKE_Fortran_COMPILER $(F90))"
-	echo "set(CMAKE_Fortran_FLAGS \"-c $(F90FLAGS)\")"
-	echo "set(CMAKE_Fortran_FLAGS_RELEASE \"\")"
-	echo "set(CMAKE_Fortran_FLAGS_DEBUG \"\")"
-	echo "set(CMAKE_C_COMPILER $(CC))"
-	echo "set(CMAKE_C_FLAGS \"-c $(CFLAGS)\")"
-	echo "set(CMAKE_C_FLAGS_RELEASE \"\")"
-	echo "set(CMAKE_C_FLAGS_DEBUG \"\")"
-	echo ""
-	echo "# Preprocessor"
-	echo "add_compile_definitions(\"$<$<COMPILE_LANGUAGE:Fortran>:$(CPPFLAGS)>\")"
-	echo "add_compile_definitions(\"$<$<COMPILE_LANGUAGE:C,CXX>:$(CPPFLAGS)>\")"
-
-'
-  (set +e; . $MESONHPROFILE; set -e; make -f <(echo -e "$MAKEFILE") -s -I $(dirname $MESONHPROFILE)/../src archfile) > $ARCHFILE
 }
 
 function setuparch() {
@@ -180,9 +100,10 @@ cd ..
 mkdir build_PHYEX
 cd build_PHYEX
 cmake ../../src -DCMAKE_INSTALL_PREFIX=\$BUILDDIR \\
-                -Dfiat_ROOT=\$BUILDDIR \\
                 -DCMAKE_BUILD_TYPE=\$level \\
-                -DCMAKE_TOOLCHAIN_FILE=\$BUILDDIR/../arch.ecbuild
+                -DCMAKE_TOOLCHAIN_FILE=\$BUILDDIR/../arch.ecbuild \\
+                -DENABLE_PHYEX_BUILD_PROGS=ON \\
+                -DENABLE_SINGLE_PRECISION=ON
 make -j
 make install
 cd ..
@@ -193,5 +114,5 @@ chmod +x compilation.sh
 ####################################
 
 # Do everything
-EXTRASUBS="-s CMakeLists.txt"
+EXTRASUBS="-s CMakeLists.txt -s cmake"
 main ecbuild $*

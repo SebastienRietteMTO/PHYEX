@@ -10,7 +10,7 @@ IMPLICIT NONE
 CONTAINS
 !
 !     #############################################################
-      SUBROUTINE INIT_AEROSOL_PROPERTIES
+      SUBROUTINE INIT_AEROSOL_PROPERTIES(PHYAERO)
 !     #############################################################
 
 !!
@@ -54,7 +54,7 @@ USE MODD_PARAM_LIMA,      ONLY : NMOD_CCN, HINI_CCN, HTYPE_CCN,        &
                                  PARAM_LIMA_ALLOCATE, PARAM_LIMA_DEALLOCATE, &
                                  XGMULTI, XGINC_IFN
 !
-USE MODD_SALT, ONLY: LSALT, NMODE_SLT
+USE MODD_PHYEX_AERO, ONLY: PHYEX_AERO_t
 use mode_msg
 !
 USE MODI_GAMMA
@@ -64,6 +64,7 @@ USE YOMHOOK, ONLY:LHOOK, DR_HOOK, JPHOOK
 !
 IMPLICIT NONE
 !
+TYPE(PHYEX_AERO_t), INTENT(INOUT) :: PHYAERO
 !
 REAL, DIMENSION(6) :: XKHEN_TMP   = (/1.56, 1.56, 1.56, 1.56, 1.56, 1.56 /)
 REAL, DIMENSION(6) :: XMUHEN_TMP  = (/0.80, 0.80, 0.80, 0.80, 0.80, 0.80 /)
@@ -163,16 +164,16 @@ IF ( NMOD_CCN .GE. 1 ) THEN
     XR_MEAN_CCN(4) = 1.75E-6
     XLOGSIG_CCN(4) = 0.708
     XRHO_CCN(4)    = 2200.   
-    IF ((LSALT).AND.(NMODE_SLT > 5)) THEN
+    IF ((PHYAERO%LSALT).AND.(PHYAERO%NMODE_SLT > 5)) THEN
       CALL PRINT_MSG(NVERB_FATAL,'GEN','INIT_AEROSOL_PROPERTIES',&
-                    &'bound checking error detected here (XINIRADIUS_SLT)')
-!      IF (CRGUNITS=="MASS") THEN
-!       XR_MEAN_CCN(4) = XINIRADIUS_SLT(6) * EXP(-3.*(LOG(XINISIG_SLT(6)))**2) * 1E-6
+                    &'bound checking error detected here (PHYAERO%XINIRADIUS_SLT)')
+!      IF (PHYAERO%CRGUNITS=="MASS") THEN
+!       XR_MEAN_CCN(4) = PHYAERO%XINIRADIUS_SLT(6) * EXP(-3.*(LOG(PHYAERO%XINISIG_SLT(6)))**2) * 1E-6
 !      ELSE
-!       XR_MEAN_CCN(4) = XINIRADIUS_SLT(6) * 1E-6
+!       XR_MEAN_CCN(4) = PHYAERO%XINIRADIUS_SLT(6) * 1E-6
 !      END IF
-!     XLOGSIG_CCN(4) = LOG(XINISIG_SLT(6))
-!     XRHO_CCN(4)    = XDENSITY_SALT
+!     XLOGSIG_CCN(4) = LOG(PHYAERO%XINISIG_SLT(6))
+!     XRHO_CCN(4)    = PHYAERO%XDENSITY_SALT
     END IF
   END IF
 !

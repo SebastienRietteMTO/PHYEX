@@ -1,188 +1,168 @@
 cmake_minimum_required(VERSION 3.10)
-project(PHYEX)
-enable_language(Fortran)
-# set(CMAKE_VERBOSE_MAKEFILE on)
+find_package(ecbuild 3.11 REQUIRED HINTS ${CMAKE_SOURCE_DIR})
+project(PHYEX VERSION 1.0 LANGUAGES Fortran)
 
-#################################################################################
-# Progs compilation
-set(PHYEX_BUILD_PROGS AUTO CACHE STRING "Build the program executables AUTO|ON|OFF")
-set_property(CACHE PHYEX_BUILD_PROGS PROPERTY STRINGS AUTO ON OFF)
-if(${PHYEX_BUILD_PROGS} STREQUAL "AUTO")
-  if(EXISTS ${CMAKE_SOURCE_DIR}/progs)
-    set(PHYEX_BUILD_PROGS ON)
-  else()
-    set(PHYEX_BUILD_PROGS OFF)
-  endif()
+include(phyex_macros)
+
+#-----------------------------------------------------------------------
+# Options
+#-----------------------------------------------------------------------
+
+ecbuild_add_option(FEATURE DOUBLE_PRECISION
+                   DESCRIPTION "Compile on double precision"
+                   DEFAULT ON)
+
+ecbuild_add_option(FEATURE SINGLE_PRECISION
+                   DESCRIPTION "Compile on single precision"
+                   DEFAULT OFF)
+
+ecbuild_add_option(FEATURE PHYEX_BUILD_PROGS
+                   DESCRIPTION "Build PHYEX program executables"
+                   DEFAULT OFF)
+
+if(HAVE_DOUBLE_PRECISION)
+  list(APPEND precision_list dp) 
 endif()
 
-#################################################################################
-# Library building
-set(ENABLE_SHARED_LIB BOTH CACHE STRING "Build shared lib ON|OFF|BOTH|NONE")
-set_property(CACHE ENABLE_SHARED_LIB PROPERTY STRINGS ON OFF BOTH NONE)
-if(${ENABLE_SHARED_LIB} STREQUAL "ON" OR ${ENABLE_SHARED_LIB} STREQUAL "BOTH")
-  set(BUILD_SHARED ON)
-else()
-  set(BUILD_SHARED OFF)
-endif()
-if(${ENABLE_SHARED_LIB} STREQUAL "OFF" OR ${ENABLE_SHARED_LIB} STREQUAL "BOTH")
-  set(BUILD_STATIC ON)
-else()
-  set(BUILD_STATIC OFF)
+if(HAVE_SINGLE_PRECISION)
+  list(APPEND precision_list sp)
 endif()
 
-#################################################################################
-# Fiat
-set(fiat_ROOT "" CACHE FILEPATH "Path to fiat installation directory")
-if(NOT EXISTS ${fiat_ROOT})
-  message(FATAL_ERROR "fiat_ROOT is not set correctly!")
-endif()
-include_directories(${fiat_ROOT}/module/fiat)
-include_directories(${fiat_ROOT}/include/fiat)
+#-----------------------------------------------------------------------
+# Dependencies 
+#-----------------------------------------------------------------------
 
-#################################################################################
-# Default real type
-set(REALDEFAULTSIZE 0)
-foreach(ONESIZE 4 8)
-  set(TEST_FILE ${CMAKE_SOURCE_DIR}/test_fortan.F90)
-  file(WRITE ${TEST_FILE}
-  "
-  PROGRAM test_size
-    REAL(KIND=${ONESIZE}), TARGET :: X
-    REAL, POINTER :: PX
-    PX => X
-  END PROGRAM
-  ")
-  try_compile(RES ${CMAKE_CURRENT_BINARY_DIR} ${TEST_FILE})
-  if(RES)
-    message(STATUS "Default real size is ${ONESIZE}")
-    set(REALDEFAULTSIZE ${ONESIZE})
-  endif()
-endforeach()
-if(${REALDEFAULTSIZE} EQUAL 4)
-  include_directories(${fiat_ROOT}/module/parkind_sp)
-elseif(${REALDEFAULTSIZE} EQUAL 8)
-  include_directories(${fiat_ROOT}/module/parkind_dp)
-else()
-  message(FATAL_ERROR "Unable to determine default real size")
-endif()
-file(REMOVE ${TEST_FILE})
+ecbuild_find_package(NAME fiat REQUIRED)
 
-#################################################################################
-# Group module files to allow their installation
-set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Mod)
+#-----------------------------------------------------------------------
+# Source structure
+#-----------------------------------------------------------------------
 
-#################################################################################
-# Build and install shared and static libraries (with module and include files)
+# Common sources
+file(GLOB PHYEX_SOURCES
+     ${CMAKE_CURRENT_SOURCE_DIR}/aux/*F90
+     ${CMAKE_CURRENT_SOURCE_DIR}/turb/*F90
+     ${CMAKE_CURRENT_SOURCE_DIR}/micro/*F90
+     ${CMAKE_CURRENT_SOURCE_DIR}/conv/*F90
+)
 
-# Source files: directories
-set(LIB_DIRECTORY_LIST aux turb micro)
-
-# Source files: entry points
-set(LIB_ENTRYPOINTS ${CMAKE_SOURCE_DIR}/aux/ini_phyex.F90
-                    ${CMAKE_SOURCE_DIR}/micro/rain_ice.F90
-                    ${CMAKE_SOURCE_DIR}/turb/shallow_mf.F90
-                    ${CMAKE_SOURCE_DIR}/turb/turb.F90
-                    ${CMAKE_SOURCE_DIR}/micro/ice_adjust.F90
-                    ${CMAKE_SOURCE_DIR}/micro/lima.F90
-                    ${CMAKE_SOURCE_DIR}/micro/lima_adjust_split.F90)
-if(EXISTS ${CMAKE_SOURCE_DIR}/pyphyex.F90)
-   list(APPEND LIB_ENTRYPOINTS ${CMAKE_SOURCE_DIR}/pyphyex.F90)
+# Source for the python binding
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/pyphyex.F90)
+  list(APPEND PHYEX_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/pyphyex.F90)
 endif()
 
-# Source files: all other source files (and specific list for header files)
-set(LIB_FILES "")
-set(HEADER_FILES "")
-foreach(D ${LIB_DIRECTORY_LIST})
-  file(GLOB DFILES ${D}/*)
-  list(APPEND LIB_FILES ${DFILES})
-  file(GLOB DFILES ${D}/*.h)
-  list(APPEND HEADER_FILES ${DFILES})
-endforeach()
-list(REMOVE_ITEM LIB_FILES ${LIB_ENTRYPOINTS})
-
-# This is the objlib target; this intermediary library is used
-# by both the static and the shared libs. This way, the sources are
-# compiled only once.
-# Because the same objects are used for static and shared, they must be
-# compiled with the PIC option.
-add_library(objlib OBJECT ${LIB_FILES})
-target_include_directories(objlib PRIVATE ${LIB_DIRECTORY_LIST})
-set_property(TARGET objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
-
-add_library(entrypointlib OBJECT ${LIB_ENTRYPOINTS})
-add_dependencies(entrypointlib objlib)
-target_include_directories(entrypointlib PRIVATE ${LIB_DIRECTORY_LIST})
-set_property(TARGET entrypointlib PROPERTY POSITION_INDEPENDENT_CODE 1)
-
-# Static library
-if(${BUILD_STATIC} OR ${PHYEX_BUILD_PROGS})
-  add_library(phyexStatic STATIC $<TARGET_OBJECTS:entrypointlib> $<TARGET_OBJECTS:objlib>)
-  target_include_directories(phyexStatic PRIVATE ${LIB_DIRECTORY_LIST})
-endif()
-if(${BUILD_STATIC})
-  set_target_properties(phyexStatic PROPERTIES OUTPUT_NAME phyex)
-  install(TARGETS phyexStatic LIBRARY DESTINATION lib)
-endif()
-
-# Shared library
-if(${BUILD_SHARED})
-  add_library(phyexShared SHARED $<TARGET_OBJECTS:entrypointlib>)
-  set_property(TARGET phyexShared PROPERTY POSITION_INDEPENDENT_CODE 1)
-  target_link_directories(phyexShared PRIVATE ${fiat_ROOT}/lib)
-  target_link_directories(phyexShared PRIVATE ${fiat_ROOT}/lib64)
-  target_link_libraries(phyexShared PRIVATE fiat)
-  target_link_libraries(phyexShared PRIVATE mpi_serial)
-  target_link_libraries(phyexShared PRIVATE $<TARGET_OBJECTS:objlib>)
-  target_include_directories(phyexShared PRIVATE ${LIB_DIRECTORY_LIST})
-  set_target_properties(phyexShared PROPERTIES OUTPUT_NAME phyex)
-  install(TARGETS phyexShared LIBRARY DESTINATION lib)
-endif()
-
-# Installation
-if(${BUILD_SHARED} OR ${BUILD_STATIC})
-  install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/
-          DESTINATION module/phyex)
-  install(FILES ${HEADER_FILES}
-          DESTINATION include/phyex)
-endif()
-
-#################################################################################
-# Build and install progs
-
-if(${PHYEX_BUILD_PROGS})
-  # Source file directories
-  set(PROGS_DIRECTORY_LIST support progs)
-
-  # All source files
-  set(PROG_FILES "")
-  foreach(D ${PROGS_DIRECTORY_LIST})
-    file(GLOB DFILES ${D}/*)
-    list(APPEND PROG_FILES ${DFILES})
-  endforeach()
-
+# Sources for the programs
+if(HAVE_PHYEX_BUILD_PROGS)
   # Entry points
-  file(GLOB PROGS_ENTRYPOINTS progs/main_*.F90)
+  file(GLOB PHYEXPROGS_ENTRYPOINTS progs/main_*.F90)
 
-  # We must excludes from PROG_FILES objects used as entry points
-  list(REMOVE_ITEM PROG_FILES ${PROGS_ENTRYPOINTS})
+  # Source files
+  file(GLOB PHYEXPROGS_SOURCES
+       ${CMAKE_CURRENT_SOURCE_DIR}/support/*90
+       ${CMAKE_CURRENT_SOURCE_DIR}/progs/*90
+  ) 
+  list(REMOVE_ITEM PHYEXPROGS_SOURCES ${PHYEXPROGS_ENTRYPOINTS})
+  list(APPEND PHYEX_SOURCES ${PHYEXPROGS_SOURCES})
+endif()
 
-  # Buid a lib with common files to all executables
-  add_library(progsobj OBJECT ${PROG_FILES})
-  if(DEFINED FPP_FLAGS_TESTPROGS)
-    target_compile_definitions(progsobj PUBLIC ${FPP_FLAGS_TESTPROGS})
+# Headers
+set(GLOB PHYEX_HEADERS
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/phyex/turb>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/phyex/micro>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/phyex/conv>
+)
+
+# Include directories
+set(PHYEX_INCLUDEDIRS
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/aux>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/micro>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/turb>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/conv>
+)
+
+#---------------
+#  Loop on precisions
+#---------------
+
+foreach(PRECISION ${precision_list})
+  #---------------
+  #  Determine suitable compilation option to use for unqualified REALs
+  #---------------
+
+  if(${PRECISION} STREQUAL "dp")
+    set(PHYEX_COMPILE_OPTIONS_REAL ${ECBUILD_Fortran_COMPILE_OPTIONS_REAL8})
+  else()
+    set(PHYEX_COMPILE_OPTIONS_REAL ${ECBUILD_Fortran_COMPILE_OPTIONS_REAL4})
   endif()
   
-  foreach(EP ${PROGS_ENTRYPOINTS})
-    get_filename_component(NAME ${EP} NAME_WLE)
-    add_executable(${NAME})
-    target_sources(${NAME} PRIVATE ${EP})
-    target_link_directories(${NAME} PRIVATE ${fiat_ROOT}/lib)
-    target_link_directories(${NAME} PRIVATE ${fiat_ROOT}/lib64)
-    target_link_libraries(${NAME} PRIVATE phyexStatic progsobj fiat mpi_serial)
-    if(DEFINED FPP_FLAGS_TESTPROGS)
-      target_compile_definitions(${NAME} PUBLIC ${FPP_FLAGS_TESTPROGS})
-    endif()
-    set_target_properties(${NAME} PROPERTIES OUTPUT_NAME ${NAME}.exe)
-    install(TARGETS ${NAME} RUNTIME DESTINATION bin)
-  endforeach()
-endif()
+  #---------------
+  #  Public library
+  #---------------
+
+  ecbuild_add_library(
+    TARGET phyex_${PRECISION}
+    SOURCES ${PHYEX_SOURCES}
+    PUBLIC_LIBS
+      fiat
+      mpi_serial
+      parkind_${PRECISION}
+    PUBLIC_INCLUDES ${PHYEX_HEADERS}
+    INSTALL_HEADERS ALL
+    HEADER_DESTINATION include/${PRECISION}
+    PUBLIC_INCLUDES ${PHYEX_INCLUDEDIRS}
+  ) 
+
+  # Compilation option to use for unqualified REALs
+  target_compile_options(phyex_${PRECISION} PUBLIC
+    $<$<COMPILE_LANGUAGE:Fortran>:${PHYEX_COMPILE_OPTIONS_REAL}>)
+
+  # Install Library 
+  install(
+    TARGETS phyex_${PRECISION}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
+  
+  # Install Modules 
+  fortran_modules_install(
+    TARGET phyex_${PRECISION}
+    MODULE_DIR ${CMAKE_CURRENT_BINARY_DIR}/modules_${PRECISION}
+  	INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/modules/${PRECISION}
+  )
+  
+  #---------------
+  #  Progs
+  #---------------
+  
+  if(HAVE_PHYEX_BUILD_PROGS)
+    # Build all executables
+    foreach(EP ${PHYEXPROGS_ENTRYPOINTS})
+      get_filename_component(NAME ${EP} NAME_WLE)
+      ecbuild_add_executable(
+        TARGET ${NAME}_${PRECISION}
+        SOURCES ${EP}
+        OBJECTS phyex_${PRECISION}
+        INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/modules_${PRECISION}
+        LIBS
+          fiat
+          mpi_serial
+          parkind_${PRECISION}
+        OUTPUT_NAME ${NAME}_${PRECISION}.exe
+      )
+      if(DEFINED FPP_FLAGS_TESTPROGS)
+        target_compile_definitions(${NAME}_${PRECISION} PUBLIC ${FPP_FLAGS_TESTPROGS})
+      endif()
+
+      # Compilation option to use for unqualified REALs
+      target_compile_options(${NAME}_${PRECISION} PUBLIC
+        $<$<COMPILE_LANGUAGE:Fortran>:${PHYEX_COMPILE_OPTIONS_REAL}>)
+    endforeach()
+  endif()
+
+endforeach()
+
+#-----------------------------------------------------------------------
+# Final packaging
+#-----------------------------------------------------------------------
+
+ecbuild_install_project(NAME PHYEX)
+ecbuild_print_summary()

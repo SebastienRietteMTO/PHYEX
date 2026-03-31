@@ -1,7 +1,7 @@
 {
-"IALcommit":"CY50T1",
-"IALbundle_tag":"BDL50T1-default",
-"cycle":"50t1",
+"IALrepo":"https://github.com/SebastienRietteMTO/IAL.git",
+"IALcommit":"PHYEX_CY50T2",
+"cycle":"50t2",
 "scripttag":"",
 "testing": {
             "small_3D":"5940866",

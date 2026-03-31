@@ -8,8 +8,6 @@ function parse_args() {
   # default values
   ARCH_PATH=$PWD/arch
   ARCH=
-  GMKFILE=
-  MESONHPROFILE=
   useexpand=1
   commit=""
   packcreation=0
@@ -31,8 +29,6 @@ $0 [options]
 --arch-path ARCH_PATH directory for architecture specific files (see below) [./arch]
                       note that arch files are first looked for in ${HOME}/.phyex/<bs>_arch where <bs> is the build system
 --arch ARCH  	        build using arch file [gnu]
---gmkfile FILE        build using a gmkpack configuration file (--arch must be used to give a name to the build dir)
---mesonhprofile FILE  build using Méso-NH profile and rules (--arch must be used to give a name to the build dir)
 --noexpand            do not use mnh_expand (code will be in array-syntax)"
 --commit              commit hash (or a directory) to test; do not use this option from within a repository
 -p                    creates 'pack' (compilation directory)
@@ -58,10 +54,6 @@ EOF
         ARCH=$1 ; shift ;; 
       "--arch-path")
         ARCH_PATH=$1 ; shift ;; 
-      "--gmkfile")
-        GMKFILE=$1 ; shift ;;
-      "--mesonhprofile")
-        MESONHPROFILE=$1 ; shift ;;
       '--noexpand') useexpand=0;;
       '--commit') commit=$1; shift;;
       '-p') packcreation=1;;
@@ -74,15 +66,7 @@ EOF
         BS_ARGS="$BS_ARGS $OPTION" ;;
     esac
   done
-  [ "$GMKFILE" == "" -a "$MESONHPROFILE" == "" -a "$ARCH" == "" ] && ARCH=gnu
-  if [ "$GMKFILE" != "" -a "$ARCH" == "" ]; then
-    echo "--arch option is mandatory if --gmkfile option is used"
-    exit 2
-  fi
-  if [ "$MESONHPROFILE" != "" -a "$ARCH" == "" ]; then
-    echo "--arch option is mandatory if --mesonhprofile option is used"
-    exit 3
-  fi
+  [ "$ARCH" == "" ] && ARCH=gnu
   if [ $inplaceInstall -eq 0 -a \
        $inplaceClean -eq 0 -a \
        $packcreation -eq 0 -a \
@@ -140,6 +124,10 @@ function main() {
   # Parse command line arguments
   parse_args $*
 
+  # Different names are possible depending on the compilation system
+  # and the options activated
+  solibnames="libphyex.so libphyex_dp.so libphyex_sp.so"
+
   if [ $inplaceClean -eq 1 ]; then
     # Change current working dir
     cd $DIR
@@ -180,15 +168,7 @@ function main() {
       exit 1
     fi
     mkdir $builddir
-    if [ "$GMKFILE" != "" ]; then
-      touch $builddir/arch.env
-      gmkfile2arch $GMKFILE $builddir
-    elif [ "$MESONHPROFILE" != "" ]; then
-      touch $builddir/arch.env
-      mesonhprofile2arch $MESONHPROFILE $builddir
-    else
-      setuparch ${ARCH} $builddir
-    fi
+    setuparch ${ARCH} $builddir
   fi
   if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
     if [ ! -d $builddir ]; then
@@ -226,7 +206,7 @@ function main() {
     trap "\rm -f $descTree" EXIT
   
     which prep_code.sh > /dev/null || export UPDATEDPATH=$PHYEXTOOLSDIR:$PATH
-    subs="$subs -s turb -s shallow -s turb_mnh -s micro -s aux -s ice_adjust -s rain_ice -s rain_ice_old -s support -s progs $EXTRASUBS"
+    subs="$subs -s turb -s shallow -s turb_mnh -s micro -s aux -s ice_adjust -s rain_ice -s rain_ice_old -s conv -s support -s progs $EXTRASUBS"
     if [ "$fromdir" == '' ]; then
       echo "Clone repository, and checkout commit $commit (using prep_code.sh)"
       if [[ $commit == testprogs${separator}* || $commit == offline${separator}* ]]; then
@@ -248,18 +228,19 @@ function main() {
     mkdir -p build/bin
     cd src
     if [ ${PYBINDING-yes} == 'yes' ]; then
-      pybinding.py micro/ice_adjust.F90 sub:ICE_ADJUST pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
-      pybinding.py micro/rain_ice.F90 sub:RAIN_ICE pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
+      sorelativenames=$(for soname in $solibnames; do echo ./../lib/$soname; done)
+      pybinding.py micro/ice_adjust.F90 sub:ICE_ADJUST pyphyex.F90 ../build/bin/pyphyex.py ${sorelativenames}
+      pybinding.py micro/rain_ice.F90 sub:RAIN_ICE pyphyex.F90 ../build/bin/pyphyex.py ${sorelativenames}
       pybinding.py micro/mode_ice4_sedimentation.F90 \
                    module:MODE_ICE4_SEDIMENTATION/sub:ICE4_SEDIMENTATION \
-                   pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
-      pybinding.py micro/rain_ice_old.F90 sub:RAIN_ICE_OLD pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
-      pybinding.py turb/shallow_mf.F90 sub:SHALLOW_MF pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
-      pybinding.py turb/turb.F90 sub:TURB pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
-      pybinding.py aux/ini_phyex.F90 sub:INI_PHYEX pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
+                   pyphyex.F90 ../build/bin/pyphyex.py ${sorelativenames}
+      pybinding.py micro/rain_ice_old.F90 sub:RAIN_ICE_OLD pyphyex.F90 ../build/bin/pyphyex.py ${sorelativenames}
+      pybinding.py turb/shallow_mf.F90 sub:SHALLOW_MF pyphyex.F90 ../build/bin/pyphyex.py ${sorelativenames}
+      pybinding.py turb/turb.F90 sub:TURB pyphyex.F90 ../build/bin/pyphyex.py ${sorelativenames}
+      pybinding.py aux/ini_phyex.F90 sub:INI_PHYEX pyphyex.F90 ../build/bin/pyphyex.py ${sorelativenames}
       pybinding.py micro/lima_adjust_split.F90 sub:LIMA_ADJUST_SPLIT pyphyex.F90 \
-                   ../build/bin/pyphyex.py ./../lib/libphyex.so
-      pybinding.py micro/lima.F90 sub:LIMA pyphyex.F90 ../build/bin/pyphyex.py ./../lib/libphyex.so
+                   ../build/bin/pyphyex.py ${sorelativenames}
+      pybinding.py micro/lima.F90 sub:LIMA pyphyex.F90 ../build/bin/pyphyex.py ${sorelativenames}
     else
       cat <<......EOF > pyphyex.F90
       SUBROUTINE PYPHYEXSUB
@@ -308,21 +289,26 @@ function main() {
     build_compilation_script src
     ./compilation.sh
 
-    if [ ! -f build/lib/libphyex.so ]; then
-      echo "Shared lib libphyex.so was not built!"
+    for soname in ${solibnames}; do
+      if [ -f build/lib/$soname ]; then
+        break
+      fi
+    done
+    if [ ! -f build/lib/$soname ]; then
+      echo "Shared lib was not built (following names were tested: ${solibnames})!"
       exit 5
     fi
     
     # Check if python can open the resulting shared lib
     set +e
     #On NEC, the shared library cannot be loaded as other lib if it was compiled for the Vector Engine
-    python3 -c "from ctypes import cdll; cdll.LoadLibrary('./build/lib/libphyex.so')"
+    python3 -c "from ctypes import cdll; cdll.LoadLibrary('./build/lib/$soname')"
     if [ $? -ne 0 ]; then
       echo "On some systems (cross-compilation) it's normal to obtain an error here"
       echo "when python tries to open the shared lib."
     fi
     set -e
     
-    # ldd -r ./build/lib/libphyex.so should also give interesting results
+    # ldd -r ./build/lib/$soname should also give interesting results
   fi
 }
