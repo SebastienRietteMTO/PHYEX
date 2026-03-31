@@ -483,9 +483,7 @@ DO JK=IKTB,IKTE
       ! Gaussian Probability Density Function around ZQ1
       ! Computation of ZG and ZGAM(=erf(ZG))
       ZGCOND(JIJ,JK) = -ZQ1(JIJ,JK)/SQRT(2.)
-
-      !Approximation of erf function for Gaussian distribution
-      ZGAUV(JIJ,JK) = 1 - SIGN(1., ZGCOND(JIJ,JK)) * SQRT(1-EXP(-4*ZGCOND(JIJ,JK)**2/CST%XPI))
+      ZGAUV(JIJ,JK) = 1 + ERF(-ZGCOND(JIJ,JK))
 
       !Computation Cloud Fraction
       PCLDFR(JIJ,JK) = MAX( 0., MIN(1.,0.5*ZGAUV(JIJ,JK)))
@@ -508,8 +506,7 @@ DO JK=IKTB,IKTE
         IF(1-ZFRAC(JIJ,JK) > 1.E-20)THEN
           ZAUTC(JIJ,JK) = (ZSBAR(JIJ,JK) - ICEP%XCRIAUTC/(PRHODREF(JIJ,JK)*(1-ZFRAC(JIJ,JK))))/ZSIGMA(JIJ,JK)
           ZGAUTC(JIJ,JK) = -ZAUTC(JIJ,JK)/SQRT(2.)
-          !Approximation of erf function for Gaussian distribution
-          ZGAUC(JIJ,JK) = 1 - SIGN(1., ZGAUTC(JIJ,JK)) * SQRT(1-EXP(-4*ZGAUTC(JIJ,JK)**2/CST%XPI))
+          ZGAUC(JIJ,JK) = 1 + ERF(-ZGAUTC(JIJ,JK))
           PHLC_HCF(JIJ,JK) = MAX( 0., MIN(1.,0.5*ZGAUC(JIJ,JK)))
           PHLC_HRC(JIJ,JK) = (1-ZFRAC(JIJ,JK))*(EXP(-ZGAUTC(JIJ,JK)**2)-ZGAUTC(JIJ,JK)*SQRT(CST%XPI)*ZGAUC(JIJ,JK))*ZSIGMA(JIJ,JK)/SQRT(2.*CST%XPI)
           PHLC_HRC(JIJ,JK) = PHLC_HRC(JIJ,JK) + ICEP%XCRIAUTC/PRHODREF(JIJ,JK) * PHLC_HCF(JIJ,JK)
@@ -529,8 +526,7 @@ DO JK=IKTB,IKTE
           ZCRIAUTI(JIJ,JK)=MIN(ICEP%XCRIAUTI,10**(ICEP%XACRIAUTI*(PT(JIJ,JK)-CST%XTT)+ICEP%XBCRIAUTI))
           ZAUTI(JIJ,JK) = (ZSBAR(JIJ,JK) - ZCRIAUTI(JIJ,JK)/ZFRAC(JIJ,JK))/ZSIGMA(JIJ,JK)
           ZGAUTI(JIJ,JK) = -ZAUTI(JIJ,JK)/SQRT(2.)
-          !Approximation of erf function for Gaussian distribution
-          ZGAUI(JIJ,JK) = 1 - SIGN(1., ZGAUTI(JIJ,JK)) * SQRT(1-EXP(-4*ZGAUTI(JIJ,JK)**2/CST%XPI))
+          ZGAUI(JIJ,JK) = 1 + ERF(-ZGAUTI(JIJ,JK))
           PHLI_HCF(JIJ,JK) = MAX( 0., MIN(1.,0.5*ZGAUI(JIJ,JK)))
           PHLI_HRI(JIJ,JK) = ZFRAC(JIJ,JK)*(EXP(-ZGAUTI(JIJ,JK)**2)-ZGAUTI(JIJ,JK)*SQRT(CST%XPI)*ZGAUI(JIJ,JK))*ZSIGMA(JIJ,JK)/SQRT(2.*CST%XPI)
           PHLI_HRI(JIJ,JK) = PHLI_HRI(JIJ,JK) + ZCRIAUTI(JIJ,JK)*PHLI_HCF(JIJ,JK)

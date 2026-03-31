@@ -328,9 +328,6 @@ IIJT=D%NIJT
 ZICEDRTMIN(1:KRR)=ICED%XRTMIN(1:KRR)
 !-------------------------------------------------------------------------------
 !
-IF(PARAMI%LOCND2) THEN
-  CALL PRINT_MSG(NVERB_FATAL, 'GEN', 'RAIN_ICE', 'LOCND2 OPTION NOT CODED IN THIS RAIN_ICE VERSION')
-END IF
 !$acc kernels
 ZINV_TSTEP=1./PTSTEP
 !
