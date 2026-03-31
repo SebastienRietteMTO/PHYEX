@@ -258,7 +258,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>zzw3n(:) = 0.<span class="comment">! NSWETH</span></div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>zzw4(:) = 0. <span class="comment">! RGWETH</span></div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>zzw4n(:) = 0.<span class="comment">! NGWETH</span></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>zzw5(:) = 0. <span class="comment">! RCWETH+RRWETH</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>zzw5(:) = 0. <span class="comment">! RRWETH</span></div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>zzw6(:) = 0. <span class="comment">! RSWETH</span></div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">!</span></div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>zrweth(:) = 0.</div>
@@ -432,12 +432,12 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span><span class="keywordflow">END WHERE</span></div>
 <div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span><span class="keywordflow">WHERE</span>( prht(:)&gt;limap%XRTMIN(6) .AND. pcht(:) &gt;limap%XCTMIN(6) .AND. prrt(:)&gt;limap%XRTMIN(3) &amp;</div>
 <div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>     .AND. pcrt(:) &gt;limap%XCTMIN(3) .AND. odcompute(:) )</div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>   <span class="comment">! Mass of rain frozen by hail RRWETH</span></div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>   <span class="comment">! Mass of rain frozen by hail or shedded after droplet collection RRWETH</span></div>
 <div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>   zzw5(:) = zrweth(:) - zzw2(:) - zzw3(:) - zzw4(:) - zzw1(:)</div>
 <div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span><span class="keywordflow">END WHERE</span></div>
 <div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span><span class="comment">!</span></div>
 <div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>zzw(:) = 0.0</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span><span class="keywordflow">WHERE</span>( odcompute(:) .AND. pt(:)&lt;cst%XTT .AND. zzw5(:)&gt;0.0 ) </div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span><span class="keywordflow">WHERE</span>( odcompute(:) .AND. prht(:)&gt;limap%XRTMIN(6) .AND. pcht(:) &gt;limap%XCTMIN(6) .AND. zzw1(:)+zzw5(:)&gt;0.) </div>
 <div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>   p_rc_weth(:) = - zzw1(:)</div>
 <div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>   p_cc_weth(:) = p_rc_weth(:) * pcct(:)/max(prct(:),limap%XRTMIN(2))</div>
 <div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>   p_rr_weth(:) = - zzw5(:)</div>
@@ -604,8 +604,8 @@ $(document).ready(function() { init_codefold(0); });
 <div class="ttc" id="anamespacemode__lima__hail_html"><div class="ttname"><a href="namespacemode__lima__hail.html">mode_lima_hail</a></div><div class="ttdef"><b>Definition</b> <a href="mode__lima__hail_8F90_source.html#l00006">mode_lima_hail.F90:6</a></div></div>
 <div class="ttc" id="anamespacemode__lima__hail_html_a7d7a4b9b29fd3388a4326ef9d6757800"><div class="ttname"><a href="namespacemode__lima__hail.html#a7d7a4b9b29fd3388a4326ef9d6757800">mode_lima_hail::lima_hail</a></div><div class="ttdeci">subroutine lima_hail(cst, limap, limam, ksize, ptstep, odcompute, prhodref, ppres, pt, pka, pdv, pcj, prvt, prct, prrt, prit, prst, prgt, prht, pcct, pcrt, pcit, pcst, pcgt, pcht, plbdc, plbdr, plbds, plbdg, plbdh, plvfact, plsfact, p_th_weth, p_rc_weth, p_cc_weth, p_rr_weth, p_cr_weth, p_ri_weth, p_ci_weth, p_rs_weth, p_cs_weth, p_rg_weth, p_cg_weth, p_rh_weth, p_rg_cohg, p_cg_cohg, p_th_hmlt, p_rr_hmlt, p_cr_hmlt, p_ch_hmlt, pa_th, pa_rc, pa_cc, pa_rr, pa_cr, pa_ri, pa_ci, pa_rs, pa_cs, pa_rg, pa_cg, pa_rh, pa_ch)</div><div class="ttdef"><b>Definition</b> <a href="mode__lima__hail_8F90_source.html#l00010">mode_lima_hail.F90:22</a></div></div>
 <div class="ttc" id="astructmodd__cst_1_1cst__t_html"><div class="ttname"><a href="structmodd__cst_1_1cst__t.html">modd_cst::cst_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__cst_8F90_source.html#l00053">modd_cst.F90:53</a></div></div>
-<div class="ttc" id="astructmodd__param__lima_1_1param__lima__t_html"><div class="ttname"><a href="structmodd__param__lima_1_1param__lima__t.html">modd_param_lima::param_lima_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__param__lima_8F90_source.html#l00042">modd_param_lima.F90:42</a></div></div>
-<div class="ttc" id="astructmodd__param__lima__mixed_1_1param__lima__mixed__t_html"><div class="ttname"><a href="structmodd__param__lima__mixed_1_1param__lima__mixed__t.html">modd_param_lima_mixed::param_lima_mixed_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__param__lima__mixed_8F90_source.html#l00024">modd_param_lima_mixed.F90:24</a></div></div>
+<div class="ttc" id="astructmodd__param__lima_1_1param__lima__t_html"><div class="ttname"><a href="structmodd__param__lima_1_1param__lima__t.html">modd_param_lima::param_lima_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__param__lima_8F90_source.html#l00046">modd_param_lima.F90:46</a></div></div>
+<div class="ttc" id="astructmodd__param__lima__mixed_1_1param__lima__mixed__t_html"><div class="ttname"><a href="structmodd__param__lima__mixed_1_1param__lima__mixed__t.html">modd_param_lima_mixed::param_lima_mixed_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__param__lima__mixed_8F90_source.html#l00025">modd_param_lima_mixed.F90:25</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

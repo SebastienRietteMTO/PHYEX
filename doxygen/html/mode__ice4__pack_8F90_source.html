@@ -82,7 +82,7 @@ $(document).ready(function() { init_codefold(0); });
   <div class="headertitle"><div class="title">mode_ice4_pack.F90</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="mode__ice4__pack_8F90.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">!MNH_LIC Copyright 1995-2021 CNRS, Meteo-France and Universite Paul Sabatier</span></div>
+<a href="mode__ice4__pack_8F90.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">!MNH_LIC Copyright 1995-2025 CNRS, Meteo-France and Universite Paul Sabatier</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">!MNH_LIC This is part of the Meso-NH software governed by the CeCILL-C licence</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">!MNH_LIC version 1. See LICENSE, CeCILL-C_V1-en.txt and CeCILL-C_V1-fr.txt</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">!MNH_LIC for details. version 1.</span></div>
@@ -91,61 +91,61 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keywordtype">IMPLICIT NONE</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">CONTAINS</span></div>
 <div class="foldopen" id="foldopen00009" data-start="" data-end="">
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="namespacemode__ice4__pack.html#ac0c7824d3f343685c805175450ca88cc">    9</a></span><span class="keyword">SUBROUTINE </span><a class="code hl_function" href="namespacemode__ice4__pack.html#ac0c7824d3f343685c805175450ca88cc">ice4_pack</a>(D, CST, PARAMI, ICEP, ICED, BUCONF, &amp;</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="namespacemode__ice4__pack.html#ac318661e53ff44aa8a137809d213174a">    9</a></span><span class="keyword">SUBROUTINE </span><a class="code hl_function" href="namespacemode__ice4__pack.html#ac318661e53ff44aa8a137809d213174a">ice4_pack</a>(D, CST, PARAMI, ICEP, ICED, BUCONF, &amp;</div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>                    &amp;KPROMA, KSIZE, PTSTEP, &amp;</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>                    &amp;KRR, OSAVE_MICRO, LDMICRO, OELEC, &amp;</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>                    &amp;PEXN, PRHODREF, PPABST, PCIT, PCLDFR, &amp;</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>                    &amp;PHLC_HCF, PHLC_HRC, PHLI_HCF, PHLI_HRI, &amp;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>                    &amp;PTHS, PRS, PRREVAV, PRAINFR, PSIGS, &amp;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>                    &amp;PTHS, PRS, PRREVAV, PRAINFR, PSIGS, PTHT, PRT, &amp;</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>                    &amp;PICLDFR, PZZZ, PCONC3D, PSSIO, PSSIU, PIFR, &amp;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                    &amp;PTHT, PRT, &amp;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>                    &amp;PBUDGETS, PLATHAM_IAGGS)</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">!     ######################################################################</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">!</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">!!****  * -  compute the explicit microphysical sources</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">!!</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">!!    PURPOSE</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">!!    -------</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">!!      The purpose of this routine is to pack arrays to compute</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">!!      the microphysics tendencies</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                    &amp;PBUDGETS, PLATHAM_IAGGS)</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">!     ######################################################################</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">!</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">!!****  * -  compute the explicit microphysical sources</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">!!</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">!!    PURPOSE</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">!!    -------</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">!!      The purpose of this routine is to pack arrays to compute</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">!!      the microphysics tendencies</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">!!</span></div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">!!</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">!!</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">!!    METHOD</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">!!    ------</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">!!      Pack arrays by chuncks</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">!!    METHOD</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">!!    ------</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">!!      Pack arrays by chuncks</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">!!</span></div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">!!</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">!!</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">!!    MODIFICATIONS</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">!!    -------------</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">!!     R. El Khatib 28-Apr-2023 Fix (and re-enable) the cache-blocking mechanism on top of phyex</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">!!     S. Riette Sept 23: all 3D arrays are suppressed from ice4_stepping</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment">!  -----------------------------------------------------------------</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment">!</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment">!*       0.    DECLARATIONS</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">!              ------------</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">!</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keywordtype">USE </span>yomhook , <span class="keywordtype">ONLY</span> : lhook, dr_hook, jphook</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__dimphyex.html">modd_dimphyex</a>,       <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__dimphyex_1_1dimphyex__t.html">dimphyex_t</a></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__budget.html">modd_budget</a>,         <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__budget_1_1tbudgetconf__t.html">tbudgetconf_t</a></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__cst.html">modd_cst</a>,            <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__cst_1_1cst__t.html">cst_t</a></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__param__ice__n.html">modd_param_ice_n</a>,      <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__param__ice__n_1_1param__ice__t.html">param_ice_t</a></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__rain__ice__descr__n.html">modd_rain_ice_descr_n</a>, <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__rain__ice__descr__n_1_1rain__ice__descr__t.html">rain_ice_descr_t</a></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__rain__ice__param__n.html">modd_rain_ice_param_n</a>, <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__rain__ice__param__n_1_1rain__ice__param__t.html">rain_ice_param_t</a></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__fields__address.html">modd_fields_address</a>, <span class="keywordtype">ONLY</span> : &amp; <span class="comment">! common fields adress</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#ade195eadced458e34c5cf9d0501963e8">irv</a>,     &amp; <span class="comment">! Water vapor</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#ad8312cd08c92620d851160721f07340d">irc</a>,     &amp; <span class="comment">! Cloud water</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a157361a93422157074aa166b60e441a8">irr</a>,     &amp; <span class="comment">! Rain water</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a7c53668603df1ef6db27699abdba8030">iri</a>,     &amp; <span class="comment">! Pristine ice</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a53f72bf37171d2d69246d849dedcf661">irs</a>,     &amp; <span class="comment">! Snow/aggregate</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a680fee9286a8ea45ba9c624a0ea9b370">irg</a>,     &amp; <span class="comment">! Graupel</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a2c84f0a375ea6f0a745cab7f86499198">irh</a>,     &amp; <span class="comment">! Hail</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#ae1e8914b4b056a44e53a0fbcc2a1da48">ibunum</a>,       &amp; <span class="comment">! Number of tendency terms</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#ac7e61d3d3b9ebcba9778995d36aaae3e">ibunum_extra</a>    <span class="comment">! Number of extra tendency terms</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">!!    MODIFICATIONS</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">!!    -------------</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">!!     R. El Khatib 28-Apr-2023 Fix (and re-enable) the cache-blocking mechanism on top of phyex</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">!!     S. Riette Sept 23: all 3D arrays are suppressed from ice4_stepping</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">!  -----------------------------------------------------------------</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment">!</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment">!*       0.    DECLARATIONS</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment">!              ------------</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">!</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keywordtype">USE </span>yomhook , <span class="keywordtype">ONLY</span> : lhook, dr_hook, jphook</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__dimphyex.html">modd_dimphyex</a>,       <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__dimphyex_1_1dimphyex__t.html">dimphyex_t</a></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__budget.html">modd_budget</a>,         <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__budget_1_1tbudgetconf__t.html">tbudgetconf_t</a></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__cst.html">modd_cst</a>,            <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__cst_1_1cst__t.html">cst_t</a></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__param__ice__n.html">modd_param_ice_n</a>,      <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__param__ice__n_1_1param__ice__t.html">param_ice_t</a></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__rain__ice__descr__n.html">modd_rain_ice_descr_n</a>, <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__rain__ice__descr__n_1_1rain__ice__descr__t.html">rain_ice_descr_t</a></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__rain__ice__param__n.html">modd_rain_ice_param_n</a>, <span class="keywordtype">ONLY</span>: <a class="code hl_struct" href="structmodd__rain__ice__param__n_1_1rain__ice__param__t.html">rain_ice_param_t</a></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemodd__fields__address.html">modd_fields_address</a>, <span class="keywordtype">ONLY</span> : &amp; <span class="comment">! common fields adress</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#ade195eadced458e34c5cf9d0501963e8">irv</a>,     &amp; <span class="comment">! Water vapor</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#ad8312cd08c92620d851160721f07340d">irc</a>,     &amp; <span class="comment">! Cloud water</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a157361a93422157074aa166b60e441a8">irr</a>,     &amp; <span class="comment">! Rain water</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a7c53668603df1ef6db27699abdba8030">iri</a>,     &amp; <span class="comment">! Pristine ice</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a53f72bf37171d2d69246d849dedcf661">irs</a>,     &amp; <span class="comment">! Snow/aggregate</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a680fee9286a8ea45ba9c624a0ea9b370">irg</a>,     &amp; <span class="comment">! Graupel</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#a2c84f0a375ea6f0a745cab7f86499198">irh</a>,     &amp; <span class="comment">! Hail</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#ae1e8914b4b056a44e53a0fbcc2a1da48">ibunum</a>,       &amp; <span class="comment">! Number of tendency terms</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>      &amp; <a class="code hl_variable" href="namespacemodd__fields__address.html#ac7e61d3d3b9ebcba9778995d36aaae3e">ibunum_extra</a></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">! Number of extra tendency terms</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">!</span></div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemode__msg.html">mode_msg</a>,            <span class="keywordtype">ONLY</span>: <a class="code hl_interface" href="interfacemode__msg_1_1print__msg.html">print_msg</a>, nverb_fatal</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemode__ice4__stepping.html">mode_ice4_stepping</a>, <span class="keywordtype">ONLY</span>: <a class="code hl_function" href="namespacemode__ice4__stepping.html#aca53d821b8680c61840f05e6cdaebc4a">ice4_stepping</a></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keywordtype">USE </span><a class="code hl_namespace" href="namespacemode__ice4__stepping.html">mode_ice4_stepping</a>, <span class="keywordtype">ONLY</span>: <a class="code hl_function" href="namespacemode__ice4__stepping.html#a6fa5bb04b47ffc9149e2cd467ca46033">ice4_stepping</a></div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">!</span></div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keywordtype">IMPLICIT NONE</span></div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
@@ -407,18 +407,18 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>      <span class="comment">!*       5.     TENDENCIES COMPUTATION</span></div>
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>      <span class="comment">!               ----------------------</span></div>
 <div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>      <span class="comment">!</span></div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>      <span class="keyword">CALL </span><a class="code hl_function" href="namespacemode__ice4__stepping.html#aca53d821b8680c61840f05e6cdaebc4a">ice4_stepping</a>(cst, parami, icep, iced, buconf, &amp;</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>      <span class="keyword">CALL </span><a class="code hl_function" href="namespacemode__ice4__stepping.html#a6fa5bb04b47ffc9149e2cd467ca46033">ice4_stepping</a>(cst, parami, icep, iced, buconf, &amp;</div>
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>                        &amp;kproma, imicro, ptstep, &amp;</div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>                        &amp;krr, osave_micro, llmicro, oelec, &amp;</div>
 <div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>                        &amp;zexn, zrhodref, &amp;</div>
 <div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>                        &amp;zpabst, zcit, zcldfr, &amp;</div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>                        &amp;zicldfr, zzzz, zconc3d, &amp;</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>                        &amp;zssio, zssiu, zifr, &amp;</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>                        &amp;zhlc_hcf, zhlc_hrc, &amp;</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>                        &amp;zhli_hcf, zhli_hri, &amp;</div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>                        &amp;zths, zrs, zrrevav, &amp;</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>                        &amp;zrainfr, zsigs, &amp;</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>                        &amp;ztht, zrt, &amp;</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>                        &amp;zhlc_hcf, zhlc_hrc, &amp;</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>                        &amp;zhli_hcf, zhli_hri, &amp;</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>                        &amp;zths, zrs, zrrevav, &amp;</div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>                        &amp;zrainfr, zsigs, &amp;</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>                        &amp;ztht, zrt, &amp;</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>                        &amp;zicldfr, zzzz, zconc3d, &amp;</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>                        &amp;zssio, zssiu, zifr, &amp;</div>
 <div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>                        &amp;zbudgets, &amp;</div>
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>                        &amp;zlatham_iaggs)</div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>      <span class="comment">!</span></div>
@@ -496,25 +496,25 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>  <span class="comment">!*       5bis.  TENDENCIES COMPUTATION</span></div>
 <div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>  <span class="comment">!               ----------------------</span></div>
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>  <span class="comment">!</span></div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>  <span class="keyword">CALL </span><a class="code hl_function" href="namespacemode__ice4__stepping.html#aca53d821b8680c61840f05e6cdaebc4a">ice4_stepping</a>(cst, parami, icep, iced, buconf, &amp;</div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>                    &amp;ksize, ksize, ptstep, &amp;</div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>  <span class="keyword">CALL </span><a class="code hl_function" href="namespacemode__ice4__stepping.html#a6fa5bb04b47ffc9149e2cd467ca46033">ice4_stepping</a>(cst, parami, icep, iced, buconf, &amp;</div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>                    &amp;ksize, d%NIJB, ptstep, &amp;</div>
 <div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>                    &amp;krr, osave_micro, ldmicro, oelec, &amp;</div>
 <div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>                    &amp;pexn, prhodref, &amp;</div>
 <div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>                    &amp;ppabst, pcit, pcldfr, &amp;</div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>                    &amp;picldfr, pzzz, pconc3d, &amp;</div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>                    &amp;pssio, pssiu, pifr, &amp;</div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>                    &amp;phlc_hcf, phlc_hrc, &amp;</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>                    &amp;phli_hcf, phli_hri,  &amp;</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>                    &amp;pths, prs, prrevav, &amp;</div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>                    &amp;prainfr, psigs, &amp;</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>                    &amp;ptht, prt, &amp;</div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>                    &amp;phlc_hcf, phlc_hrc, &amp;</div>
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>                    &amp;phli_hcf, phli_hri,  &amp;</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>                    &amp;pths, prs, prrevav, &amp;</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>                    &amp;prainfr, psigs, &amp;</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>                    &amp;ptht, prt, &amp;</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>                    &amp;picldfr, pzzz, pconc3d, &amp;</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>                    &amp;pssio, pssiu, pifr, &amp;</div>
 <div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>                    &amp;pbudgets, &amp;</div>
 <div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>                    &amp;platham_iaggs)</div>
 <div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span> </div>
 <div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span><span class="keywordflow">ENDIF</span> <span class="comment">! PARAMI%LPACK_MICRO</span></div>
 <div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span><span class="comment">!</span></div>
 <div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span><span class="keywordflow">IF</span> (lhook) <span class="keyword">CALL </span>dr_hook(<span class="stringliteral">&#39;ICE4_PACK&#39;</span>, 1, zhook_handle)</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span><span class="keyword">END SUBROUTINE </span><a class="code hl_function" href="namespacemode__ice4__pack.html#ac0c7824d3f343685c805175450ca88cc">ice4_pack</a></div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span><span class="keyword">END SUBROUTINE </span><a class="code hl_function" href="namespacemode__ice4__pack.html#ac318661e53ff44aa8a137809d213174a">ice4_pack</a></div>
 <div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span><span class="keyword">END MODULE </span><a class="code hl_namespace" href="namespacemode__ice4__pack.html">mode_ice4_pack</a></div>
 </div>
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span> </div>
@@ -536,11 +536,11 @@ $(document).ready(function() { init_codefold(0); });
 <div class="ttc" id="anamespacemodd__rain__ice__descr__n_html"><div class="ttname"><a href="namespacemodd__rain__ice__descr__n.html">modd_rain_ice_descr_n</a></div><div class="ttdef"><b>Definition</b> <a href="modd__rain__ice__descrn_8F90_source.html#l00006">modd_rain_ice_descrn.F90:6</a></div></div>
 <div class="ttc" id="anamespacemodd__rain__ice__param__n_html"><div class="ttname"><a href="namespacemodd__rain__ice__param__n.html">modd_rain_ice_param_n</a></div><div class="ttdef"><b>Definition</b> <a href="modd__rain__ice__paramn_8F90_source.html#l00006">modd_rain_ice_paramn.F90:6</a></div></div>
 <div class="ttc" id="anamespacemode__ice4__pack_html"><div class="ttname"><a href="namespacemode__ice4__pack.html">mode_ice4_pack</a></div><div class="ttdef"><b>Definition</b> <a href="mode__ice4__pack_8F90_source.html#l00006">mode_ice4_pack.F90:6</a></div></div>
-<div class="ttc" id="anamespacemode__ice4__pack_html_ac0c7824d3f343685c805175450ca88cc"><div class="ttname"><a href="namespacemode__ice4__pack.html#ac0c7824d3f343685c805175450ca88cc">mode_ice4_pack::ice4_pack</a></div><div class="ttdeci">subroutine ice4_pack(d, cst, parami, icep, iced, buconf, kproma, ksize, ptstep, krr, osave_micro, ldmicro, oelec, pexn, prhodref, ppabst, pcit, pcldfr, phlc_hcf, phlc_hrc, phli_hcf, phli_hri, pths, prs, prrevav, prainfr, psigs, picldfr, pzzz, pconc3d, pssio, pssiu, pifr, ptht, prt, pbudgets, platham_iaggs)</div><div class="ttdef"><b>Definition</b> <a href="mode__ice4__pack_8F90_source.html#l00009">mode_ice4_pack.F90:18</a></div></div>
+<div class="ttc" id="anamespacemode__ice4__pack_html_ac318661e53ff44aa8a137809d213174a"><div class="ttname"><a href="namespacemode__ice4__pack.html#ac318661e53ff44aa8a137809d213174a">mode_ice4_pack::ice4_pack</a></div><div class="ttdeci">subroutine ice4_pack(d, cst, parami, icep, iced, buconf, kproma, ksize, ptstep, krr, osave_micro, ldmicro, oelec, pexn, prhodref, ppabst, pcit, pcldfr, phlc_hcf, phlc_hrc, phli_hcf, phli_hri, pths, prs, prrevav, prainfr, psigs, ptht, prt, picldfr, pzzz, pconc3d, pssio, pssiu, pifr, pbudgets, platham_iaggs)</div><div class="ttdef"><b>Definition</b> <a href="mode__ice4__pack_8F90_source.html#l00009">mode_ice4_pack.F90:17</a></div></div>
 <div class="ttc" id="anamespacemode__ice4__stepping_html"><div class="ttname"><a href="namespacemode__ice4__stepping.html">mode_ice4_stepping</a></div><div class="ttdef"><b>Definition</b> <a href="mode__ice4__stepping_8F90_source.html#l00006">mode_ice4_stepping.F90:6</a></div></div>
-<div class="ttc" id="anamespacemode__ice4__stepping_html_aca53d821b8680c61840f05e6cdaebc4a"><div class="ttname"><a href="namespacemode__ice4__stepping.html#aca53d821b8680c61840f05e6cdaebc4a">mode_ice4_stepping::ice4_stepping</a></div><div class="ttdeci">subroutine ice4_stepping(cst, parami, icep, iced, buconf, kproma, kmicro, ptstep, krr, osave_micro, ldmicro, oelec, pexn, prhodref, ppabst, pcit, pcldfr, picldfr, pzzz, pconc3d, pssio, pssiu, pifr, phlc_hcf, phlc_hrc, phli_hcf, phli_hri, pths, prs, prrevav, prainfr, psigs, ptht, prt, pbudgets, platham_iaggs)</div><div class="ttdef"><b>Definition</b> <a href="mode__ice4__stepping_8F90_source.html#l00009">mode_ice4_stepping.F90:18</a></div></div>
+<div class="ttc" id="anamespacemode__ice4__stepping_html_a6fa5bb04b47ffc9149e2cd467ca46033"><div class="ttname"><a href="namespacemode__ice4__stepping.html#a6fa5bb04b47ffc9149e2cd467ca46033">mode_ice4_stepping::ice4_stepping</a></div><div class="ttdeci">subroutine ice4_stepping(cst, parami, icep, iced, buconf, kproma, kmicro, ptstep, krr, osave_micro, ldmicro, oelec, pexn, prhodref, ppabst, pcit, pcldfr, phlc_hcf, phlc_hrc, phli_hcf, phli_hri, pths, prs, prrevav, prainfr, psigs, ptht, prt, picldfr, pzzz, pconc3d, pssio, pssiu, pifr, pbudgets, platham_iaggs)</div><div class="ttdef"><b>Definition</b> <a href="mode__ice4__stepping_8F90_source.html#l00009">mode_ice4_stepping.F90:17</a></div></div>
 <div class="ttc" id="anamespacemode__msg_html"><div class="ttname"><a href="namespacemode__msg.html">mode_msg</a></div><div class="ttdef"><b>Definition</b> <a href="mode__msg_8F90_source.html#l00005">mode_msg.F90:5</a></div></div>
-<div class="ttc" id="astructmodd__budget_1_1tbudgetconf__t_html"><div class="ttname"><a href="structmodd__budget_1_1tbudgetconf__t.html">modd_budget::tbudgetconf_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__budget_8F90_source.html#l00103">modd_budget.F90:103</a></div></div>
+<div class="ttc" id="astructmodd__budget_1_1tbudgetconf__t_html"><div class="ttname"><a href="structmodd__budget_1_1tbudgetconf__t.html">modd_budget::tbudgetconf_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__budget_8F90_source.html#l00106">modd_budget.F90:106</a></div></div>
 <div class="ttc" id="astructmodd__cst_1_1cst__t_html"><div class="ttname"><a href="structmodd__cst_1_1cst__t.html">modd_cst::cst_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__cst_8F90_source.html#l00053">modd_cst.F90:53</a></div></div>
 <div class="ttc" id="astructmodd__dimphyex_1_1dimphyex__t_html"><div class="ttname"><a href="structmodd__dimphyex_1_1dimphyex__t.html">modd_dimphyex::dimphyex_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__dimphyexn_8F90_source.html#l00038">modd_dimphyexn.F90:38</a></div></div>
 <div class="ttc" id="astructmodd__param__ice__n_1_1param__ice__t_html"><div class="ttname"><a href="structmodd__param__ice__n_1_1param__ice__t.html">modd_param_ice_n::param_ice_t</a></div><div class="ttdef"><b>Definition</b> <a href="modd__param__icen_8F90_source.html#l00046">modd_param_icen.F90:46</a></div></div>

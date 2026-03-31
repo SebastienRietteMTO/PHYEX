@@ -84,12 +84,12 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:a45fe64d21afbc6cace563fda83cb1e79" id="r_a45fe64d21afbc6cace563fda83cb1e79"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lima_8F90.html#a45fe64d21afbc6cace563fda83cb1e79">lima</a> (limap, limaw, limac, limam, tnsv, d, cst, nebn, iced, icep, elecd, elecp, buconf, tbudgets, hactccn, kbudgets, krr, ptstep, oelec, prhodref, pexnref, pdzz, pthvrefzikb, prhodj, ppabst, kcarb, ksoa, ksp, odust, osalt, oorilam, odthrad, pdthrad, ptht, prt, psvt, pw_nu, paero, psolorg, pmi, pths, prs, psvs, pinprc, pindep, pinprr, pinpri, pinprs, pinprg, pinprh, pevap3d, pcldfr, picefr, pprcfr, pfpr, platham_iaggs, pefieldw, psv_elec_t, psv_elec_s)</td></tr>
-<tr class="separator:a45fe64d21afbc6cace563fda83cb1e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44669a04dd97ef6c68aeb7803059fd3c" id="r_a44669a04dd97ef6c68aeb7803059fd3c"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lima_8F90.html#a44669a04dd97ef6c68aeb7803059fd3c">lima</a> (limap, limaw, limac, limam, tnsv, d, cst, nebn, iced, icep, elecd, elecp, buconf, tbudgets, hactccn, kbudgets, krr, ptstep, oelec, prhodref, pexnref, pdzz, pthvrefzikb, prhodj, ppabst, kcarb, ksoa, ksp, odust, osalt, oorilam, odthrad, pdthrad, ptht, prt, psvt, pcit, pw_nu, paero, psolorg, pmi, pths, prs, psvs, pinprc, pindep, pinprr, pinpri, pinprs, pinprg, pinprh, pevap3d, pcldfr, picefr, pprcfr, pfpr, phlc_hcf, phlc_hrc, phli_hcf, phli_hri, platham_iaggs, pefieldw, psv_elec_t, psv_elec_s)</td></tr>
+<tr class="separator:a44669a04dd97ef6c68aeb7803059fd3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function/Subroutine Documentation</h2>
-<a id="a45fe64d21afbc6cace563fda83cb1e79" name="a45fe64d21afbc6cace563fda83cb1e79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45fe64d21afbc6cace563fda83cb1e79">&#9670;&#160;</a></span>lima()</h2>
+<a id="a44669a04dd97ef6c68aeb7803059fd3c" name="a44669a04dd97ef6c68aeb7803059fd3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44669a04dd97ef6c68aeb7803059fd3c">&#9670;&#160;</a></span>lima()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -313,6 +313,12 @@ Functions/Subroutines</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">real, dimension(d%nijt, d%nkt), intent(inout)&#160;</td>
+          <td class="paramname"><em>pcit</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">real, dimension(d%nijt, d%nkt), intent(in)&#160;</td>
           <td class="paramname"><em>pw_nu</em>, </td>
         </tr>
@@ -427,6 +433,30 @@ Functions/Subroutines</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>phlc_hcf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>phlc_hrc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>phli_hcf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>phli_hri</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">real, dimension(d%nijt, d%nkt), intent(in), optional&#160;</td>
           <td class="paramname"><em>platham_iaggs</em>, </td>
         </tr>
@@ -460,109 +490,109 @@ Functions/Subroutines</h2></td></tr>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="lima_8F90_a45fe64d21afbc6cace563fda83cb1e79_cgraph.png" border="0" usemap="#alima_8F90_a45fe64d21afbc6cace563fda83cb1e79_cgraph" alt=""/></div>
-<map name="alima_8F90_a45fe64d21afbc6cace563fda83cb1e79_cgraph" id="alima_8F90_a45fe64d21afbc6cace563fda83cb1e79_cgraph">
-<area shape="rect" title=" " alt="" coords="5,327,56,352"/>
-<area shape="rect" href="namespacemode__elec__tendencies.html#a832296ffdd143f05525e5b27002e652b" title=" " alt="" coords="128,70,299,110"/>
-<area shape="poly" title=" " alt="" coords="31,326,38,292,51,245,72,195,102,148,122,129,146,114,148,119,126,134,106,152,76,197,56,247,43,293,36,327"/>
-<area shape="rect" href="namespacemode__lima__compute__cloud__fractions.html#ab0ef7be0a4b7adc256c4aab0a9a31e7e" title=" " alt="" coords="113,163,314,217"/>
-<area shape="poly" title=" " alt="" coords="35,325,59,279,79,252,102,228,110,222,113,227,106,232,83,255,64,281,40,328"/>
-<area shape="rect" href="namespacemode__lima__inst__procs.html#a6c03116b37ea1e7e88795475346cdf6c" title=" " alt="" coords="129,319,297,359"/>
-<area shape="poly" title=" " alt="" coords="56,337,115,337,115,342,56,342"/>
-<area shape="rect" href="namespacemode__lima__nucleation__procs.html#a72240eeca7448319f2b8eb01e72fc9df" title=" " alt="" coords="104,519,323,559"/>
-<area shape="poly" title=" " alt="" coords="46,351,187,507,183,511,42,354"/>
-<area shape="rect" href="namespacemode__lima__sedimentation.html#ad5d080255221def1b9da5ec90c72ca2e" title=" " alt="" coords="115,242,311,282"/>
-<area shape="poly" title=" " alt="" coords="56,326,103,305,150,285,152,290,105,310,58,331"/>
-<area shape="rect" href="namespacemode__lima__shape__compute__lbda.html#a6798cc7c83b4469883cdc6a4b13cd832" title=" " alt="" coords="111,584,316,639"/>
-<area shape="poly" title=" " alt="" coords="35,352,38,393,48,451,70,514,86,543,106,570,110,573,106,577,102,573,81,546,65,516,43,453,33,394,30,353"/>
-<area shape="rect" href="namespacemode__lima__tendencies.html#acefa2d69ebd2194440988a2afd517425" title=" " alt="" coords="127,1485,300,1525"/>
-<area shape="poly" title=" " alt="" coords="37,352,209,1471,204,1472,31,352"/>
-<area shape="rect" href="namespacemode__compute__lambda.html#af2d05e2662d02460970ea3f49bac8d82" title=" " alt="" coords="407,55,585,95"/>
-<area shape="poly" title=" " alt="" coords="299,83,393,78,393,83,299,88"/>
-<area shape="rect" href="namespacemode__elec__compute__ex.html#a521f2c8257d9921e8ef5c73aa92a8307" title=" " alt="" coords="406,119,586,159"/>
-<area shape="poly" title=" " alt="" coords="299,102,393,119,392,124,298,107"/>
-<area shape="rect" href="mode__elec__tendencies_8F90.html#a1e35548fa13a06879e39760e23b25e19" title=" " alt="" coords="416,5,576,31"/>
-<area shape="poly" title=" " alt="" coords="276,67,370,41,413,31,414,36,371,46,278,73"/>
-<area shape="rect" href="mode__ini__rain__ice_8F90.html#add52ba87c6e3f776dd335c6aebbee776" title=" " alt="" coords="757,5,821,31"/>
-<area shape="poly" title=" " alt="" coords="576,15,743,15,743,21,576,21"/>
-<area shape="rect" href="namespacemode__lima__drops__break__up.html#a7cc4e3c6aff7aee595d55b68af3f6386" title=" " alt="" coords="400,247,592,287"/>
-<area shape="poly" title=" " alt="" coords="292,317,403,288,404,293,293,322"/>
-<area shape="rect" href="namespacemode__lima__drops__hom__freezing.html#ab2bd7a0fa46a51f77260bf49ecd8a243" title=" " alt="" coords="409,312,583,367"/>
-<area shape="poly" title=" " alt="" coords="298,337,395,337,395,342,298,342"/>
-<area shape="rect" href="namespacemode__lima__ice__melting.html#ad88ead9ee0101e05941e895cc8bb9337" title=" " alt="" coords="407,391,585,431"/>
-<area shape="poly" title=" " alt="" coords="293,357,404,385,403,391,292,362"/>
-<area shape="rect" href="namespacemode__lima__ccn__activation.html#abc1c855d76ed81dd65e912638061e76a" title=" " alt="" coords="398,455,594,495"/>
-<area shape="poly" title=" " alt="" coords="302,517,393,496,395,501,303,522"/>
-<area shape="rect" href="namespacemode__lima__ccn__hom__freezing.html#a9a46d16c26d28c3fa3c46d29f30296d1" title=" " alt="" coords="386,519,606,559"/>
-<area shape="poly" title=" " alt="" coords="323,537,372,537,372,542,323,542"/>
-<area shape="rect" href="namespacemode__lima__ice4__nucleation.html#a3029cae607f7dcd830c05100e52398a9" title=" " alt="" coords="394,583,598,623"/>
-<area shape="poly" title=" " alt="" coords="303,557,395,578,393,583,302,562"/>
-<area shape="rect" href="namespacemode__lima__meyers__nucleation.html#a7c7fbae3f44914ce5387fe1fa2536ba6" title=" " alt="" coords="383,647,609,687"/>
-<area shape="poly" title=" " alt="" coords="303,557,324,569,340,586,349,602,357,618,372,633,382,639,379,644,369,637,353,621,344,605,336,589,321,573,300,562"/>
-<area shape="rect" href="namespacemode__lima__phillips__ifn__nucleation.html#acadb4c30a030e06784f7a9c8ca0a2b6e" title=" " alt="" coords="409,712,583,767"/>
-<area shape="poly" title=" " alt="" coords="308,557,324,569,338,586,345,602,349,635,353,667,360,682,372,697,397,715,394,719,369,701,356,685,348,668,344,635,340,604,333,588,321,573,305,562"/>
-<area shape="rect" href="mode__lima__ccn__activation_8F90.html#a1fc2197bb5e03d994cf4624b9a88ab44" title=" " alt="" coords="759,463,818,488"/>
-<area shape="poly" title=" " alt="" coords="594,473,745,473,745,478,594,478"/>
-<area shape="rect" href="namespacemode__lima__phillips__integ.html#a68ca360a0d494ee102d29790d492b1f2" title=" " alt="" coords="692,647,885,687"/>
-<area shape="poly" title=" " alt="" coords="583,715,692,688,694,693,584,721"/>
-<area shape="rect" href="namespacemode__lima__phillips__ref__spectrum.html#ab91199aba8de6e0614c6c8f158c7ab44" title=" " alt="" coords="704,712,873,767"/>
-<area shape="poly" title=" " alt="" coords="584,737,690,737,690,742,584,742"/>
-<area shape="poly" title=" " alt="" coords="296,239,321,226,336,213,344,198,353,183,369,169,392,157,394,162,372,174,357,187,349,201,340,216,324,231,299,244"/>
-<area shape="rect" href="namespacemode__elec__beard__effect.html#a1294ed60c5f7fc904f054eb043ed03a5" title=" " alt="" coords="405,183,587,223"/>
-<area shape="poly" title=" " alt="" coords="310,239,391,222,392,227,311,245"/>
-<area shape="rect" href="namespacemode__lima__bergeron.html#ae90ef0e9c298a123f26eb5ec3fde2f08" title=" " alt="" coords="416,1593,576,1633"/>
-<area shape="poly" title=" " alt="" coords="252,1523,308,1551,372,1578,404,1589,402,1594,370,1583,305,1556,250,1527"/>
-<area shape="rect" href="namespacemode__lima__collisional__ice__breakup.html#a261dfb36b2c9cbb63693a88d0d0ec665" title=" " alt="" coords="387,1657,605,1712"/>
-<area shape="poly" title=" " alt="" coords="234,1523,292,1582,330,1614,372,1642,385,1649,383,1654,369,1647,327,1618,288,1586,230,1527"/>
-<area shape="rect" href="namespacemode__lima__conversion__melting__snow.html#a096034821425d877f37c87b837e8f1fc" title=" " alt="" coords="379,1736,613,1791"/>
-<area shape="poly" title=" " alt="" coords="226,1524,247,1566,279,1619,321,1675,345,1700,372,1723,379,1727,376,1731,369,1727,342,1704,317,1678,274,1622,242,1568,221,1526"/>
-<area shape="rect" href="namespacemode__lima__droplets__accretion.html#a5de1ace8a71a722550a4c828a922b321" title=" " alt="" coords="403,1815,589,1869"/>
-<area shape="poly" title=" " alt="" coords="222,1524,238,1579,268,1654,288,1694,312,1733,340,1770,372,1801,392,1814,389,1819,369,1805,336,1773,308,1736,283,1697,263,1656,233,1581,217,1526"/>
-<area shape="rect" href="namespacemode__lima__droplets__autoconversion.html#aa8ca9d19aee094a6aaf45c8ee256a385" title=" " alt="" coords="401,1893,591,1948"/>
-<area shape="poly" title=" " alt="" coords="220,1524,232,1592,258,1688,278,1740,303,1791,335,1838,372,1880,390,1893,387,1897,369,1884,330,1842,299,1793,273,1742,253,1690,226,1593,214,1525"/>
-<area shape="rect" href="namespacemode__lima__droplets__hom__freezing.html#a811858b8e39dee1dd462dc12f3a09604" title=" " alt="" coords="407,1972,585,2027"/>
-<area shape="poly" title=" " alt="" coords="218,1525,226,1605,235,1660,248,1721,268,1785,295,1848,329,1907,372,1959,395,1975,392,1979,369,1963,325,1910,290,1850,263,1787,243,1723,229,1661,220,1605,213,1525"/>
-<area shape="rect" href="namespacemode__lima__droplets__riming__snow.html#a45bb6ab1902140b5eb84c41a2152f2b1" title=" " alt="" coords="392,2051,600,2105"/>
-<area shape="poly" title=" " alt="" coords="217,1525,220,1617,227,1682,239,1754,258,1830,286,1905,323,1976,346,2008,373,2037,382,2046,378,2050,369,2041,342,2011,319,1978,281,1907,253,1831,234,1755,222,1682,215,1617,212,1525"/>
-<area shape="rect" href="namespacemode__lima__droplets__self__collection.html#aaa1c927cb365fab47dc52682c54ddf39" title=" " alt="" coords="405,2129,587,2184"/>
-<area shape="poly" title=" " alt="" coords="220,1525,237,1645,269,1823,290,1915,315,2000,343,2069,357,2096,373,2116,394,2133,391,2137,369,2120,353,2099,338,2072,310,2002,285,1917,264,1824,232,1646,215,1525"/>
-<area shape="rect" href="namespacemode__lima__drops__self__collection.html#a72e41b4e43d2840e5946ddcefa90c980" title=" " alt="" coords="410,2208,582,2263"/>
-<area shape="poly" title=" " alt="" coords="219,1525,234,1659,264,1861,285,1966,310,2062,340,2141,356,2172,373,2195,399,2214,395,2218,369,2199,351,2175,335,2144,305,2064,280,1967,259,1861,229,1659,214,1525"/>
-<area shape="rect" href="namespacemode__lima__graupel.html#af70cc5c74b0e36b56e10f6165eb96ac3" title=" " alt="" coords="417,2287,575,2327"/>
-<area shape="poly" title=" " alt="" coords="219,1525,231,1672,258,1898,279,2016,305,2125,336,2214,354,2248,373,2273,387,2285,404,2294,402,2299,384,2290,369,2277,349,2251,331,2216,300,2126,274,2018,253,1899,225,1673,213,1525"/>
-<area shape="rect" href="namespacemode__lima__graupel__deposition.html#adcb926f4d141aba4ca9f0a535c76c19c" title=" " alt="" coords="383,2351,609,2391"/>
-<area shape="poly" title=" " alt="" coords="218,1525,229,1683,254,1929,275,2057,301,2175,333,2272,352,2310,373,2338,376,2341,372,2345,369,2341,348,2312,329,2275,296,2177,270,2058,249,1929,223,1684,213,1525"/>
-<area shape="rect" href="namespacemode__lima__hail.html#a7d7a4b9b29fd3388a4326ef9d6757800" title=" " alt="" coords="399,791,593,816"/>
-<area shape="poly" title=" " alt="" coords="214,1484,228,1352,258,1154,279,1051,304,956,334,879,351,849,369,827,385,815,388,819,373,831,355,852,339,881,309,958,284,1052,263,1155,233,1353,219,1485"/>
-<area shape="rect" href="namespacemode__lima__hail__deposition.html#aaae7eb83fb28060b923e7457ce0e406e" title=" " alt="" coords="395,841,597,881"/>
-<area shape="poly" title=" " alt="" coords="214,1484,231,1363,263,1185,284,1092,309,1008,337,938,352,911,369,891,382,880,385,884,373,895,357,914,342,940,314,1009,289,1094,268,1186,236,1364,220,1485"/>
-<area shape="rect" href="namespacemode__lima__ice__aggregation__snow.html#a88c6b88195acd0ce06d990eb2ce8095b" title=" " alt="" coords="371,905,621,945"/>
-<area shape="poly" title=" " alt="" coords="211,1484,213,1389,219,1322,230,1247,249,1168,278,1091,317,1018,341,985,369,955,373,951,376,955,373,959,345,988,321,1021,283,1093,255,1170,236,1248,224,1322,218,1390,216,1484"/>
-<area shape="rect" href="namespacemode__lima__ice__deposition.html#a30a51d8173bb1f710b05367826e9928c" title=" " alt="" coords="398,969,594,1009"/>
-<area shape="poly" title=" " alt="" coords="212,1484,219,1401,227,1343,241,1278,260,1211,287,1144,323,1081,369,1025,384,1013,388,1017,373,1029,328,1084,292,1146,265,1212,246,1279,232,1344,224,1402,218,1485"/>
-<area shape="rect" href="namespacemode__lima__shape__compute__lbda.html#afbdd88c58791bc09ac78e8162f2e3d0a" title=" " alt="" coords="669,1026,908,1066"/>
-<area shape="poly" title=" " alt="" coords="212,1484,218,1404,226,1350,239,1290,259,1229,286,1169,322,1116,369,1071,390,1059,418,1051,490,1040,572,1036,655,1036,655,1042,573,1041,490,1045,419,1056,392,1064,372,1075,326,1119,291,1172,264,1231,244,1292,231,1351,223,1405,217,1485"/>
-<area shape="rect" href="namespacemode__lima__ice__self__collection.html#af3eb11775e94b223207a7371d34dde02" title=" " alt="" coords="419,1084,573,1139"/>
-<area shape="poly" title=" " alt="" coords="215,1484,228,1420,256,1330,276,1281,302,1234,332,1189,369,1149,404,1128,407,1132,372,1153,336,1192,306,1236,281,1284,261,1332,234,1421,220,1485"/>
-<area shape="rect" href="namespacemode__lima__rain__accr__snow.html#ab9039208ab8fb8cb069fc8fb5479d712" title=" " alt="" coords="393,1163,599,1203"/>
-<area shape="poly" title=" " alt="" coords="217,1484,233,1430,263,1356,283,1317,308,1279,336,1244,369,1213,379,1206,382,1211,372,1217,340,1247,312,1282,288,1320,268,1358,238,1431,222,1485"/>
-<area shape="rect" href="namespacemode__lima__rain__evaporation.html#a3e77b77b499d15a4793e1aa84e30dc8a" title=" " alt="" coords="390,1227,602,1267"/>
-<area shape="poly" title=" " alt="" coords="220,1483,240,1440,272,1384,315,1326,341,1300,369,1277,378,1271,381,1276,372,1282,345,1304,319,1330,277,1387,245,1443,225,1486"/>
-<area shape="rect" href="namespacemode__lima__rain__freezing.html#abd245290d4ddc09751129d068c063eba" title=" " alt="" coords="403,1291,589,1331"/>
-<area shape="poly" title=" " alt="" coords="226,1483,283,1413,323,1374,369,1341,388,1332,391,1336,372,1346,327,1378,287,1417,231,1486"/>
-<area shape="rect" href="namespacemode__lima__raindrop__shattering__freezing.html#a383384b0dc488ae1df5c45fe7d093463" title=" " alt="" coords="399,1355,593,1425"/>
-<area shape="poly" title=" " alt="" coords="258,1482,370,1434,387,1427,389,1432,372,1439,260,1487"/>
-<area shape="rect" href="namespacemode__lima__snow__deposition.html#a23a76a8e621a10bdc476ccca83a605ef" title=" " alt="" coords="391,1449,601,1489"/>
-<area shape="poly" title=" " alt="" coords="300,1491,377,1481,377,1486,301,1496"/>
-<area shape="rect" href="namespacemode__lima__snow__self__collection.html#a7fb7af1992ed51c63f887a82fb6144df" title=" " alt="" coords="411,1513,581,1568"/>
-<area shape="poly" title=" " alt="" coords="301,1513,398,1526,397,1531,300,1518"/>
-<area shape="rect" href="mode__lima__graupel_8F90.html#a48c558d519a59bc87d2019e72067bd52" title=" " alt="" coords="728,2295,849,2320"/>
-<area shape="poly" title=" " alt="" coords="575,2305,715,2305,715,2310,575,2310"/>
-<area shape="rect" href="mode__lima__hail_8F90.html#a9d03f5fa17dea6e8ee9cca45b088276d" title=" " alt="" coords="727,791,851,816"/>
-<area shape="poly" title=" " alt="" coords="593,801,713,801,713,806,593,806"/>
-<area shape="rect" href="namespacemode__lima__change__shape.html#a4a38d6aba769b1415b787d50506a2670" title=" " alt="" coords="691,962,886,1002"/>
-<area shape="poly" title=" " alt="" coords="594,984,677,982,677,987,594,989"/>
-<area shape="poly" title=" " alt="" coords="595,1005,673,1021,672,1026,594,1010"/>
+<div class="center"><img src="lima_8F90_a44669a04dd97ef6c68aeb7803059fd3c_cgraph.png" border="0" usemap="#alima_8F90_a44669a04dd97ef6c68aeb7803059fd3c_cgraph" alt=""/></div>
+<map name="alima_8F90_a44669a04dd97ef6c68aeb7803059fd3c_cgraph" id="alima_8F90_a44669a04dd97ef6c68aeb7803059fd3c_cgraph">
+<area shape="rect" title=" " alt="" coords="5,553,56,578"/>
+<area shape="rect" href="namespacemode__elec__tendencies.html#a832296ffdd143f05525e5b27002e652b" title=" " alt="" coords="128,92,299,132"/>
+<area shape="poly" title=" " alt="" coords="30,552,34,500,45,419,67,326,82,279,102,235,137,182,176,140,180,143,141,185,106,237,87,281,72,328,50,420,39,500,35,553"/>
+<area shape="rect" href="namespacemode__lima__compute__cloud__fractions.html#ab0ef7be0a4b7adc256c4aab0a9a31e7e" title=" " alt="" coords="113,249,314,303"/>
+<area shape="poly" title=" " alt="" coords="29,552,31,508,41,445,63,376,80,343,102,314,106,310,110,314,106,318,84,346,68,378,46,446,37,509,35,553"/>
+<area shape="rect" href="namespacemode__lima__compute__pdf.html#ada7cfac9525eefbb28364711710f3b36" title=" " alt="" coords="403,728,589,768"/>
+<area shape="poly" title=" " alt="" coords="56,557,109,549,179,546,217,549,255,556,291,569,324,589,339,603,346,619,351,651,354,683,360,698,372,713,392,726,389,730,369,717,356,701,349,684,345,651,341,620,334,606,321,593,289,574,254,561,217,554,179,551,109,554,56,562"/>
+<area shape="rect" href="namespacemode__lima__inst__procs.html#a6c03116b37ea1e7e88795475346cdf6c" title=" " alt="" coords="129,328,297,368"/>
+<area shape="poly" title=" " alt="" coords="40,551,102,474,184,377,188,380,106,478,44,554"/>
+<area shape="rect" href="namespacemode__lima__nucleation__procs.html#a72240eeca7448319f2b8eb01e72fc9df" title=" " alt="" coords="104,488,323,528"/>
+<area shape="poly" title=" " alt="" coords="55,555,135,530,137,535,57,560"/>
+<area shape="rect" href="namespacemode__lima__rainfr__vert.html#a542fc4fa30d5deaa2800fd6366fe9323" title=" " alt="" coords="128,603,299,643"/>
+<area shape="poly" title=" " alt="" coords="57,571,137,596,135,601,55,576"/>
+<area shape="rect" href="namespacemode__lima__sedimentation.html#ad5d080255221def1b9da5ec90c72ca2e" title=" " alt="" coords="115,667,311,707"/>
+<area shape="poly" title=" " alt="" coords="41,577,67,615,85,635,106,652,115,658,113,663,102,657,81,639,62,618,37,580"/>
+<area shape="rect" href="namespacemode__lima__shape__compute__lbda.html#a6798cc7c83b4469883cdc6a4b13cd832" title=" " alt="" coords="111,731,316,786"/>
+<area shape="poly" title=" " alt="" coords="37,578,58,644,78,683,106,717,111,721,108,725,102,721,74,686,53,646,32,579"/>
+<area shape="rect" href="namespacemode__lima__tendencies.html#a979afc73321e0bb962caf6d004610f90" title=" " alt="" coords="127,1451,300,1491"/>
+<area shape="poly" title=" " alt="" coords="37,578,208,1436,203,1437,32,579"/>
+<area shape="rect" href="namespacemode__compute__lambda.html#af2d05e2662d02460970ea3f49bac8d82" title=" " alt="" coords="407,120,585,160"/>
+<area shape="poly" title=" " alt="" coords="299,118,393,127,393,132,298,123"/>
+<area shape="rect" href="namespacemode__elec__compute__ex.html#a521f2c8257d9921e8ef5c73aa92a8307" title=" " alt="" coords="406,5,586,45"/>
+<area shape="poly" title=" " alt="" coords="268,89,370,55,399,46,401,51,371,60,269,94"/>
+<area shape="rect" href="mode__elec__tendencies_8F90.html#a1e35548fa13a06879e39760e23b25e19" title=" " alt="" coords="416,70,576,95"/>
+<area shape="poly" title=" " alt="" coords="298,101,402,90,403,95,299,106"/>
+<area shape="rect" href="mode__ini__rain__ice_8F90.html#add52ba87c6e3f776dd335c6aebbee776" title=" " alt="" coords="757,70,821,95"/>
+<area shape="poly" title=" " alt="" coords="576,80,743,80,743,85,576,85"/>
+<area shape="rect" href="namespacemode__lima__drops__break__up.html#a7cc4e3c6aff7aee595d55b68af3f6386" title=" " alt="" coords="400,328,592,368"/>
+<area shape="poly" title=" " alt="" coords="298,345,386,345,386,351,298,351"/>
+<area shape="rect" href="namespacemode__lima__drops__hom__freezing.html#ab2bd7a0fa46a51f77260bf49ecd8a243" title=" " alt="" coords="409,185,583,239"/>
+<area shape="poly" title=" " alt="" coords="296,326,321,313,336,298,344,282,353,266,369,250,394,236,397,240,372,254,357,269,349,285,340,301,324,317,299,331"/>
+<area shape="rect" href="namespacemode__lima__ice__melting.html#ad88ead9ee0101e05941e895cc8bb9337" title=" " alt="" coords="407,264,585,304"/>
+<area shape="poly" title=" " alt="" coords="297,326,393,304,394,310,298,332"/>
+<area shape="rect" href="namespacemode__lima__ccn__activation.html#abc1c855d76ed81dd65e912638061e76a" title=" " alt="" coords="398,392,594,432"/>
+<area shape="poly" title=" " alt="" coords="258,485,370,441,396,433,398,438,372,447,260,490"/>
+<area shape="rect" href="namespacemode__lima__ccn__hom__freezing.html#a9a46d16c26d28c3fa3c46d29f30296d1" title=" " alt="" coords="386,456,606,496"/>
+<area shape="poly" title=" " alt="" coords="323,493,372,487,372,493,323,498"/>
+<area shape="rect" href="namespacemode__lima__ice4__nucleation.html#a3029cae607f7dcd830c05100e52398a9" title=" " alt="" coords="394,520,598,560"/>
+<area shape="poly" title=" " alt="" coords="323,518,380,524,380,530,323,523"/>
+<area shape="rect" href="namespacemode__lima__meyers__nucleation.html#a7c7fbae3f44914ce5387fe1fa2536ba6" title=" " alt="" coords="383,584,609,624"/>
+<area shape="poly" title=" " alt="" coords="277,526,324,544,348,557,372,570,394,577,392,582,370,574,345,562,322,549,275,531"/>
+<area shape="rect" href="namespacemode__lima__phillips__ifn__nucleation.html#acadb4c30a030e06784f7a9c8ca0a2b6e" title=" " alt="" coords="409,649,583,703"/>
+<area shape="poly" title=" " alt="" coords="294,526,324,545,342,568,349,591,356,613,372,634,397,650,394,654,369,638,351,615,344,592,337,570,321,549,291,530"/>
+<area shape="rect" href="mode__lima__ccn__activation_8F90.html#a1fc2197bb5e03d994cf4624b9a88ab44" title=" " alt="" coords="759,399,818,425"/>
+<area shape="poly" title=" " alt="" coords="594,409,745,409,745,415,594,415"/>
+<area shape="rect" href="namespacemode__lima__phillips__integ.html#a68ca360a0d494ee102d29790d492b1f2" title=" " alt="" coords="692,692,885,732"/>
+<area shape="poly" title=" " alt="" coords="584,684,679,696,678,701,583,689"/>
+<area shape="rect" href="namespacemode__lima__phillips__ref__spectrum.html#ab91199aba8de6e0614c6c8f158c7ab44" title=" " alt="" coords="704,613,873,667"/>
+<area shape="poly" title=" " alt="" coords="583,663,690,649,691,655,584,668"/>
+<area shape="poly" title=" " alt="" coords="214,1450,228,1316,258,1114,279,1009,305,913,334,834,351,803,369,779,388,764,392,769,373,783,355,806,339,836,310,915,285,1011,264,1115,234,1317,219,1451"/>
+<area shape="rect" href="namespacemode__lima__bergeron.html#ae90ef0e9c298a123f26eb5ec3fde2f08" title=" " alt="" coords="416,1595,576,1635"/>
+<area shape="poly" title=" " alt="" coords="239,1489,297,1535,333,1559,372,1580,404,1593,402,1598,370,1585,331,1564,294,1539,236,1493"/>
+<area shape="rect" href="namespacemode__lima__collisional__ice__breakup.html#a261dfb36b2c9cbb63693a88d0d0ec665" title=" " alt="" coords="387,1659,605,1714"/>
+<area shape="poly" title=" " alt="" coords="229,1489,285,1565,326,1607,372,1644,383,1651,380,1655,369,1649,322,1611,281,1568,225,1492"/>
+<area shape="rect" href="namespacemode__lima__conversion__melting__snow.html#a096034821425d877f37c87b837e8f1fc" title=" " alt="" coords="379,1738,613,1793"/>
+<area shape="poly" title=" " alt="" coords="224,1490,242,1538,273,1601,317,1668,343,1698,372,1725,378,1729,375,1733,369,1729,339,1702,312,1671,269,1604,238,1540,219,1492"/>
+<area shape="rect" href="namespacemode__lima__droplets__accretion.html#a5de1ace8a71a722550a4c828a922b321" title=" " alt="" coords="403,1817,589,1871"/>
+<area shape="poly" title=" " alt="" coords="221,1490,235,1551,263,1636,283,1681,308,1726,338,1767,372,1803,392,1817,389,1821,369,1807,333,1771,304,1729,279,1684,258,1638,230,1553,216,1492"/>
+<area shape="rect" href="namespacemode__lima__droplets__autoconversion.html#aa8ca9d19aee094a6aaf45c8ee256a385" title=" " alt="" coords="401,1895,591,1950"/>
+<area shape="poly" title=" " alt="" coords="219,1490,229,1564,253,1669,273,1727,299,1783,332,1836,372,1882,390,1895,387,1900,369,1886,328,1839,295,1786,268,1728,248,1671,223,1565,214,1491"/>
+<area shape="rect" href="namespacemode__lima__droplets__hom__freezing.html#a811858b8e39dee1dd462dc12f3a09604" title=" " alt="" coords="407,1974,585,2029"/>
+<area shape="poly" title=" " alt="" coords="217,1491,223,1576,231,1636,244,1702,263,1772,291,1840,326,1904,373,1961,395,1977,392,1981,369,1965,322,1907,286,1842,258,1773,239,1704,226,1637,218,1577,212,1491"/>
+<area shape="rect" href="namespacemode__lima__droplets__riming__snow.html#a45bb6ab1902140b5eb84c41a2152f2b1" title=" " alt="" coords="392,2053,600,2107"/>
+<area shape="poly" title=" " alt="" coords="220,1490,239,1603,272,1769,293,1854,317,1932,344,1996,373,2040,382,2048,378,2052,369,2043,339,1999,312,1934,288,1855,267,1770,233,1604,215,1491"/>
+<area shape="rect" href="namespacemode__lima__droplets__self__collection.html#aaa1c927cb365fab47dc52682c54ddf39" title=" " alt="" coords="405,2131,587,2186"/>
+<area shape="poly" title=" " alt="" coords="219,1490,236,1617,267,1806,288,1904,313,1994,341,2068,357,2097,373,2118,394,2135,391,2139,369,2122,352,2100,336,2071,308,1996,283,1905,262,1807,230,1618,214,1491"/>
+<area shape="rect" href="namespacemode__lima__drops__self__collection.html#a72e41b4e43d2840e5946ddcefa90c980" title=" " alt="" coords="410,2210,582,2265"/>
+<area shape="poly" title=" " alt="" coords="219,1491,233,1631,262,1843,283,1954,308,2056,338,2140,355,2173,373,2197,398,2216,395,2220,369,2201,350,2175,333,2142,303,2058,278,1956,257,1844,228,1631,214,1491"/>
+<area shape="rect" href="namespacemode__lima__graupel.html#af70cc5c74b0e36b56e10f6165eb96ac3" title=" " alt="" coords="417,2289,575,2329"/>
+<area shape="poly" title=" " alt="" coords="218,1491,230,1645,256,1882,277,2005,303,2119,335,2213,353,2249,373,2275,387,2287,404,2296,402,2301,384,2292,369,2279,348,2252,330,2215,297,2121,271,2007,251,1882,224,1645,213,1491"/>
+<area shape="rect" href="namespacemode__lima__graupel__deposition.html#adcb926f4d141aba4ca9f0a535c76c19c" title=" " alt="" coords="383,2353,609,2393"/>
+<area shape="poly" title=" " alt="" coords="218,1491,227,1655,238,1778,252,1912,273,2046,299,2170,315,2224,332,2271,351,2310,373,2340,376,2343,372,2347,369,2343,347,2313,327,2273,310,2226,294,2171,267,2047,247,1912,232,1778,222,1656,213,1491"/>
+<area shape="rect" href="namespacemode__lima__hail.html#a7d7a4b9b29fd3388a4326ef9d6757800" title=" " alt="" coords="399,793,593,818"/>
+<area shape="poly" title=" " alt="" coords="214,1450,230,1323,260,1136,281,1039,306,950,335,878,352,850,369,829,385,817,388,821,373,833,356,853,340,880,311,952,286,1040,265,1137,235,1324,219,1450"/>
+<area shape="rect" href="namespacemode__lima__hail__deposition.html#aaae7eb83fb28060b923e7457ce0e406e" title=" " alt="" coords="395,843,597,883"/>
+<area shape="poly" title=" " alt="" coords="215,1450,233,1336,265,1168,287,1081,311,1002,338,937,353,912,369,893,382,882,385,886,373,897,358,915,343,939,316,1004,292,1083,270,1169,238,1336,220,1451"/>
+<area shape="rect" href="namespacemode__lima__ice__aggregation__snow.html#a88c6b88195acd0ce06d990eb2ce8095b" title=" " alt="" coords="371,907,621,947"/>
+<area shape="poly" title=" " alt="" coords="212,1450,215,1361,222,1298,235,1228,254,1155,282,1083,320,1016,343,985,369,957,373,953,376,957,373,961,347,988,324,1019,287,1085,259,1157,240,1229,228,1299,221,1361,217,1451"/>
+<area shape="rect" href="namespacemode__lima__ice__deposition.html#ae7b5daf3f28b714f93de535d2407a9c8" title=" " alt="" coords="398,971,594,1011"/>
+<area shape="poly" title=" " alt="" coords="213,1450,221,1372,231,1319,245,1259,265,1197,291,1136,326,1078,369,1027,384,1015,388,1020,373,1031,330,1081,296,1138,270,1199,250,1260,236,1320,227,1373,218,1451"/>
+<area shape="rect" href="namespacemode__lima__shape__compute__lbda.html#afbdd88c58791bc09ac78e8162f2e3d0a" title=" " alt="" coords="669,1000,908,1040"/>
+<area shape="poly" title=" " alt="" coords="213,1450,222,1377,231,1328,246,1274,266,1218,292,1164,326,1114,369,1073,390,1061,418,1050,489,1035,572,1026,655,1020,655,1026,573,1031,490,1041,419,1056,392,1065,372,1077,330,1118,297,1167,271,1220,251,1275,237,1329,227,1378,218,1451"/>
+<area shape="rect" href="namespacemode__lima__ice__self__collection.html#af3eb11775e94b223207a7371d34dde02" title=" " alt="" coords="419,1086,573,1141"/>
+<area shape="poly" title=" " alt="" coords="216,1450,232,1392,261,1311,281,1268,306,1226,335,1186,369,1151,404,1130,407,1135,372,1155,339,1190,310,1229,286,1271,266,1313,237,1393,221,1451"/>
+<area shape="rect" href="namespacemode__lima__rain__accr__snow.html#aebd130e1f7f2134ea29981b2c83eb7a1" title=" " alt="" coords="393,1165,599,1205"/>
+<area shape="poly" title=" " alt="" coords="219,1450,237,1402,268,1338,312,1272,339,1241,369,1215,379,1209,382,1213,372,1219,343,1245,316,1275,273,1341,242,1404,224,1452"/>
+<area shape="rect" href="namespacemode__lima__rain__evaporation.html#aebd72e60123e854fbe0506172264a24a" title=" " alt="" coords="390,1229,602,1269"/>
+<area shape="poly" title=" " alt="" coords="223,1449,245,1412,278,1366,320,1319,369,1279,380,1273,383,1277,372,1284,323,1323,282,1370,250,1415,228,1452"/>
+<area shape="rect" href="namespacemode__lima__rain__freezing.html#abd245290d4ddc09751129d068c063eba" title=" " alt="" coords="403,1293,589,1333"/>
+<area shape="poly" title=" " alt="" coords="232,1449,290,1396,328,1367,369,1343,389,1335,391,1339,372,1348,331,1372,294,1400,236,1453"/>
+<area shape="rect" href="namespacemode__lima__raindrop__shattering__freezing.html#a383384b0dc488ae1df5c45fe7d093463" title=" " alt="" coords="399,1357,593,1427"/>
+<area shape="poly" title=" " alt="" coords="285,1448,385,1420,387,1425,287,1453"/>
+<area shape="rect" href="namespacemode__lima__snow__deposition.html#a23a76a8e621a10bdc476ccca83a605ef" title=" " alt="" coords="391,1451,601,1491"/>
+<area shape="poly" title=" " alt="" coords="300,1468,377,1468,377,1473,300,1473"/>
+<area shape="rect" href="namespacemode__lima__snow__self__collection.html#a7fb7af1992ed51c63f887a82fb6144df" title=" " alt="" coords="411,1515,581,1570"/>
+<area shape="poly" title=" " alt="" coords="293,1488,398,1515,397,1520,292,1493"/>
+<area shape="rect" href="mode__lima__graupel_8F90.html#a48c558d519a59bc87d2019e72067bd52" title=" " alt="" coords="728,2297,849,2322"/>
+<area shape="poly" title=" " alt="" coords="575,2307,715,2307,715,2312,575,2312"/>
+<area shape="rect" href="mode__lima__hail_8F90.html#a9d03f5fa17dea6e8ee9cca45b088276d" title=" " alt="" coords="727,793,851,818"/>
+<area shape="poly" title=" " alt="" coords="593,803,713,803,713,808,593,808"/>
+<area shape="poly" title=" " alt="" coords="595,998,656,1004,655,1009,594,1003"/>
 </map>
 </div>
 
