@@ -337,29 +337,35 @@ if [ $is_directory -eq 1 -o $is_commit -eq 1 ]; then
     #The git repository is a directory
     fromdir=$commit
     if [ -d $commit/src ]; then
+      arome_ready=false
       content_ial_version=$(scp $commit/src/arome/ial_version.json /dev/stdout 2>/dev/null || echo "")
       cmd_apl_arome="scp $commit/src/arome/ext/apl_arome.F90 /dev/stdout"
     else
+      arome_ready=true
       content_ial_version=$(scp $commit/ial_version.json /dev/stdout 2>/dev/null || echo "")
       cmd_apl_arome="scp $commit/ext/apl_arome.F90 /dev/stdout"
     fi
     packBranch=$(echo $commit | sed 's/\//'${separator}'/g' | sed 's/:/'${separator}'/g' | sed 's/\./'${separator}'/g')
   else
-    #The git repository is on github
-    if [[ $commit == arome${separator}* ]]; then
-      apl_arome_file="ext/apl_arome.F90"
-      ial_version_file="ial_version.json"
-    else
-      apl_arome_file="src/arome/ext/apl_arome.F90"
-      ial_version_file="src/arome/ial_version.json"
-    fi
     if echo $commit | grep '^tags/' > /dev/null; then
       urlcommit=$(echo $commit | cut -d / -f 2-)
     else
       urlcommit=$commit
     fi
-    content_ial_version=$(wget --no-check-certificate https://raw.githubusercontent.com/$PHYEXREPOuser/PHYEX/${urlcommit}/$ial_version_file -O - 2>/dev/null || echo "")
+    arome_ready=$(wget --no-check-certificate https://github.com/$PHYEXREPOuser/PHYEX/tree/$urlcommit/src -O - > /dev/null 2>&1 && echo false || echo true)
+    #The git repository is on github
+    if [ $arome_ready == true ]; then
+      apl_arome_file="ext/apl_arome.F90"
+    else
+      apl_arome_file="src/arome/ext/apl_arome.F90"
+    fi
     cmd_apl_arome="wget --no-check-certificate https://raw.githubusercontent.com/$PHYEXREPOuser/PHYEX/${urlcommit}/$apl_arome_file -O - 2>/dev/null"
+    for ial_version_file in ial_version.json src/arome/ial_version.json; do
+      content_ial_version=$(wget --no-check-certificate https://raw.githubusercontent.com/$PHYEXREPOuser/PHYEX/${urlcommit}/$ial_version_file -O - 2>/dev/null || echo "")
+      if [ ! "$content_ial_version" == "" ]; then
+        break
+      fi
+    done
     packBranch="COMMIT$(echo $commit | sed 's/\//'${separator}'/g' | sed 's/:/'${separator}'/g' | sed 's/\./'${separator}'/g')"
   fi
   if [ ! "$content_ial_version" == "" ]; then
@@ -652,7 +658,7 @@ if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
   prep_code=$PHYEXTOOLSDIR/prep_code.sh
   if [ "$fromdir" == '' ]; then
     echo "Clone repository, and checkout commit $commit (using prep_code.sh)"
-    if [[ $commit == arome${separator}* ]]; then
+    if [ $arome_ready == true ]; then
       $prep_code $prepCodeOpts -c $commit PHYEX #This commit is ready for inclusion
     else
       $prep_code $prepCodeOpts -c $commit $subs -m arome PHYEX -- --shumanFUNCtoCALL --removeACC $expand_options
@@ -660,7 +666,7 @@ if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
   else
     echo "Copy $fromdir"
     mkdir PHYEX
-    if [ -d $fromdir/src ]; then
+    if [ $arome_ready == false ]; then
       scp -q -r $fromdir/src PHYEX/
       $prep_code $prepCodeOpts $subs -m arome PHYEX -- --shumanFUNCtoCALL --removeACC $expand_options
     else
