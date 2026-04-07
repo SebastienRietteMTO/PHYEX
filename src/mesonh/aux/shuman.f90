@@ -419,7 +419,7 @@ ENDDO
 !
 DO JK = 1, IKU
   DO JJ=1,IJU
-    PMXM(1,JJ,JK)    = PMXM(IIU-2*JPHEXT+1,JJ,JK)  	!TODO: voir si ce n'est pas plutot JPHEXT+1
+    PMXM(1,JJ,JK)    = PMXM(IIU-2*JPHEXT+1,JJ,JK)  !TODO: voir si ce n'est pas plutot JPHEXT+1
   ENDDO
 ENDDO
 #else
@@ -494,7 +494,7 @@ IJU = SIZE(PA,2)
   ENDDO
 !
   DO JJ=1,IJU
-    PMXM(1,JJ)    = PMXM(IIU-2*JPHEXT+1,JJ)  	!TODO: voir si ce n'est pas plutot JPHEXT+1
+    PMXM(1,JJ)    = PMXM(IIU-2*JPHEXT+1,JJ)  !TODO: voir si ce n'est pas plutot JPHEXT+1
   ENDDO
 #else
 JIJOR  = 1 + 1

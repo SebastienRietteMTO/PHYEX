@@ -97,7 +97,7 @@ ENDDO
 !$acc loop independent collapse(2)
 DO JK = 1, IKU
   DO JJ=1,IJU
-    PMXM(1,JJ,JK)    = PMXM(IIU-2*JPHEXT+1,JJ,JK)  	!TODO: voir si ce n'est pas plutot JPHEXT+1
+    PMXM(1,JJ,JK)    = PMXM(IIU-2*JPHEXT+1,JJ,JK)  !TODO: voir si ce n'est pas plutot JPHEXT+1
   ENDDO
 ENDDO
 !$acc end kernels
@@ -1321,7 +1321,7 @@ END SUBROUTINE DXF_PHY
 !!
 !!    AUTHOR
 !!    ------
-!!	V. Ducrocq       * Meteo France *
+!!      V. Ducrocq       * Meteo France *
 !!
 !!    MODIFICATIONS
 !!    -------------
@@ -1523,7 +1523,7 @@ END SUBROUTINE DXM_PHY
 !!
 !!    AUTHOR
 !!    ------
-!!	V. Ducrocq       * Meteo France *
+!!      V. Ducrocq       * Meteo France *
 !!
 !!    MODIFICATIONS
 !!    -------------
@@ -1731,7 +1731,7 @@ END SUBROUTINE DYM_PHY
 !!
 !!    AUTHOR
 !!    ------
-!!	V. Ducrocq       * Meteo France *
+!!      V. Ducrocq       * Meteo France *
 !!
 !!    MODIFICATIONS
 !!    -------------
@@ -1939,7 +1939,7 @@ END SUBROUTINE DYF_PHY
 !!
 !!    AUTHOR
 !!    ------
-!!	V. Ducrocq       * Meteo France *
+!!      V. Ducrocq       * Meteo France *
 !!
 !!    MODIFICATIONS
 !!    -------------
