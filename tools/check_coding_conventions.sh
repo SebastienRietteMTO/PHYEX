@@ -10,6 +10,7 @@ set -o pipefail #abort if left command on a pipe fails
 # - that there is no (:) in subroutine call
 # - the absence of unused local variables
 # - that mode_ice4_pack and mode_ice4_stepping have the same interface
+# # the presence of ONLY clause in USE statements
 
 PHYEXTOOLSDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -58,8 +59,10 @@ result_all=""
 
 # Check interfaces of mode_ice4_pack and mode_ice4_stepping
 result=$(python3 -c "
-import pyfortool
+import pyfortool, os
 def args(filename):
+  if not os.path.exists(filename):
+       return []
   vars = [v for v in pyfortool.PYFT(filename).varList if v['arg']]
   vars = sorted(vars, key=lambda v: v['argorder'])
   return [v['n'] for v in vars]
@@ -77,6 +80,7 @@ result_all="${result_all}\n${result}"
 result=$(pyfortool_parallel --tree $SOURCEDIR --descTree $JSONDIR/tree.json \
                             --wrapH --enableCache \
                             --checkIMPLICIT Warn --checkINTENT Warn \
+                            --checkONLY Warn \
                             --checkPHYEXUnusedLocalVar Warn \
                             --checkEmptyParensInCall Warn 2>&1)
 [ "$result" != "" ] && check=false
