@@ -150,7 +150,6 @@ PHLI_HRI(:,:,:)=PRT(:,:,4,:)
 PHLI_HCF(:,:,:)=1.
 PCIT(:,:,:)=0.
 PCIT_OUT(:,:,:)=0.
-ZTWOTSTEP=2*PHYEX%MISC%PTSTEP
 
 KLEV = SIZE (PRS, 2)
 
@@ -162,6 +161,8 @@ PRINT *, " NPROMA = ", NPROMA, " KLEV = ", KLEV, " NGPBLKS = ", NGPBLKS
 ! Code is not yet ready for GPU
 CALL INIT_PHYEX(KRR, PHYEX)
 #endif
+
+ZTWOTSTEP=2*PHYEX%MISC%PTSTEP
 
 D0%NIT  = NPROMA
 D0%NIB  = 1
@@ -209,7 +210,7 @@ DO ITIME = 1, NTIME
 !$acc data &
 !$acc      & copyin  (D0, &
 !$acc      &          PRHODREF, PEXNREF, PDZZ, PRHODJ, PPABSM, PDTHRAD, PTHT, &
-!$acc      &          PRT, PSVT, PW_NU) &
+!$acc      &          PRT, PSVT, PW_NU, ZTWOTSTEP) &
 !$acc      & copy    (PRS, PSVS, PTHS, PCLDFR, PICEFR, PPRCFR, PFPR) &
 !$acc      & copyout (ZINPRC, ZINDEP, PINPRR, ZINPRI, PINPRS, PINPRG, PINPRH, &
 !$acc      &          PEVAP) &

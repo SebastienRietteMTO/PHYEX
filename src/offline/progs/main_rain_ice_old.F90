@@ -247,7 +247,7 @@ DO ITIME = 1, NTIME
 !$acc      & copyin  (D0, TLES, LKOGAN, LMODICEDEP, KKA, KKU, KKL, KSPLITR, PTSTEP, KRR, ISIZEMICRO, &
 !$acc      &          LLMICRO, PDZZ, PRHODJ, PRHODREF, PEXNREF, PPABSM, PCLDFR, PICLDFR, PSSIO, PSSIU, &
 !$acc      &          OAERONRT, OAEIFN, &
-!$acc      &          PTHT, PRT, PSIGS, PSEA, PTOWN, PICENU, PKGN_ACON, PKGN_SBGR) &
+!$acc      &          PTHT, PRT, PSIGS, PSEA, PTOWN, PICENU, PKGN_ACON, PKGN_SBGR, ZTWOTSTEP) &
 !$acc      & copy    (PCIT, PIFR, PTHS, PRS) &
 !$acc      & copyout (ZINPRC, PINPRR, PEVAP, PINPRS, PINPRG, PFPR) &
 !$acc      & create  (PSTACK4, PSTACK8) 
