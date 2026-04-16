@@ -291,7 +291,8 @@ REAL, DIMENSION(D%NIJT,D%NKT)  ::  &
        ZSOURCE,  & ! source of evolution for the treated variable
        ZKEFF,    & ! effectif diffusion coeff = LT * SQRT( TKE )
        ZWORK1, &   ! working var. for shuman operators (array syntax)
-       ZMZMRHODJ
+       ZMZMRHODJ, &
+       ZWKLES       ! working var. for LES calls
 INTEGER             :: IKT          ! array size in k direction
 INTEGER             :: IIJB,IIJE,IKB,IKE,IKA ! index value for the mass points of the domain 
 INTEGER             :: IKTB,IKTE    ! start, end of k loops in physical domain
@@ -487,13 +488,16 @@ DO JSV=1,KSV
   !
   IF (TLES%LLES_CALL) THEN
     CALL SECOND_MNH(ZTIME1)
-    CALL LES_MEAN_SUBGRID_PHY(D, TLES, MZF(ZFLXZ), TLES%X_LES_SUBGRID_WSv(:,:,:,JSV) )
-    CALL LES_MEAN_SUBGRID_PHY(D, TLES, GZ_W_M(PWM,PDZZ)*MZF(ZFLXZ), &
-                           TLES%X_LES_RES_ddxa_W_SBG_UaSv(:,:,:,JSV) )
-    CALL LES_MEAN_SUBGRID_PHY(D, TLES, MZF(GZ_M_W(PSVM(:,:,JSV),PDZZ)*ZFLXZ), &
-                           TLES%X_LES_RES_ddxa_Sv_SBG_UaSv(:,:,:,JSV) )
-    CALL LES_MEAN_SUBGRID_PHY(D, TLES, -ZCSVP*SQRT(PTKEM)/PLM*MZF(ZFLXZ), TLES%X_LES_SUBGRID_SvPz(:,:,:,JSV) )
-    CALL LES_MEAN_SUBGRID_PHY(D, TLES, MZF(PWM*ZFLXZ), TLES%X_LES_RES_W_SBG_WSv(:,:,:,JSV) )
+    ZWKLES = MZF(ZFLXZ)
+    CALL LES_MEAN_SUBGRID_PHY(D, TLES, ZWKLES, TLES%X_LES_SUBGRID_WSv(:,:,:,JSV) )
+    ZWKLES = GZ_W_M(PWM,PDZZ)*MZF(ZFLXZ)
+    CALL LES_MEAN_SUBGRID_PHY(D, TLES, ZWKLES, TLES%X_LES_RES_ddxa_W_SBG_UaSv(:,:,:,JSV) )
+    ZWKLES = MZF(GZ_M_W(PSVM(:,:,JSV),PDZZ)*ZFLXZ)
+    CALL LES_MEAN_SUBGRID_PHY(D, TLES, ZWKLES, TLES%X_LES_RES_ddxa_Sv_SBG_UaSv(:,:,:,JSV) )
+    ZWKLES = -ZCSVP*SQRT(PTKEM)/PLM*MZF(ZFLXZ)
+    CALL LES_MEAN_SUBGRID_PHY(D, TLES, ZWKLES, TLES%X_LES_SUBGRID_SvPz(:,:,:,JSV) )
+    ZWKLES = MZF(PWM*ZFLXZ)
+    CALL LES_MEAN_SUBGRID_PHY(D, TLES, ZWKLES, TLES%X_LES_RES_W_SBG_WSv(:,:,:,JSV) )
     CALL SECOND_MNH(ZTIME2)
     TLES%XTIME_LES = TLES%XTIME_LES + ZTIME2 - ZTIME1
   END IF

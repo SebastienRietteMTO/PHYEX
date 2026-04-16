@@ -102,6 +102,7 @@ CHARACTER(LEN=4) :: C_SEDIM
 CHARACTER(LEN=4) :: CSUBG_AUCV_RC
 LOGICAL :: OWARM
 REAL    :: PTSTEP
+REAL    :: ZTWOTSTEP
 
 CALL INITOPTIONS()
 NGPBLKS = 150
@@ -164,6 +165,7 @@ CALL GETDATA_RAIN_ICE_OLD(NPROMA, NGPBLKS, NFLEVG, KRR, &
 KLEV = SIZE (PRS, 2)
 OAERONRT = .FALSE.
 OAEIFN = .FALSE.
+ZTWOTSTEP = 2*PTSTEP
 
 IF (LLVERBOSE) PRINT *, " KLEV = ", KLEV, " KRR = ", KRR
   
@@ -312,7 +314,7 @@ DO ITIME = 1, NTIME
                         LKOGAN=LKOGAN, LMODICEDEP=LMODICEDEP,                              &
                         HSEDIM=PHYEX%PARAM_ICEN%CSEDIM, HSUBG_AUCV_RC=PHYEX%PARAM_ICEN%CSUBG_AUCV_RC, OWARM=PHYEX%PARAM_ICEN%LWARM,&
                         KKA=KKA, KKU=KKU, KKL=KKL,                                         &
-                        KSPLITR=KSPLITR, PTSTEP=2*PTSTEP, KRR=KRR,                         &
+                        KSPLITR=KSPLITR, PTSTEP=ZTWOTSTEP, KRR=KRR,                         &
                         KSIZE=ISIZEMICRO, GMICRO=LLMICRO(:,:,IBL),                                &
                         PDZZ=PDZZ(:,:,IBL), PRHODJ=PRHODJ(:,:,IBL), PRHODREF=PRHODREF(:,:,IBL),  &
                         PEXNREF=PEXNREF(:,:,IBL), PPABST=PPABSM(:,:,IBL),                      &

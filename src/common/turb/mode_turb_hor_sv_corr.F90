@@ -107,7 +107,7 @@ REAL, DIMENSION(D%NIT,D%NJT,D%NKT,KSV), INTENT(IN)    ::  PSVM         ! scalar 
 !*       0.2  declaration of local variables
 !
 REAL, DIMENSION(D%NIT,D%NJT,D%NKT)       &
-                                     :: ZFLX, ZA
+                                     :: ZFLX, ZA, ZWKLES
 !
 INTEGER             :: JSV          ! loop counter
 INTEGER             :: IKU, IIT, IJT, IKT
@@ -149,9 +149,11 @@ DO JSV=1,KSV
       ZFLX(:,:,:) =  ZCSV / ZCSVD * PLM(:,:,:) * PLEPS(:,:,:) *   &
             GX_M_M(OFLAT,PSVM(:,:,:,JSV),PDXX,PDZZ,PDZX)**2
     END IF
-    CALL LES_MEAN_SUBGRID( -2.*ZCSVD*SQRT(PTKEM)*ZFLX/PLEPS, &
+    ZWKLES = -2.*ZCSVD*SQRT(PTKEM)*ZFLX/PLEPS
+    CALL LES_MEAN_SUBGRID( ZWKLES, &
                            TLES%X_LES_SUBGRID_DISS_Sv2(:,:,:,JSV), .TRUE. )
-    CALL LES_MEAN_SUBGRID( MZF(PWM)*ZFLX, TLES%X_LES_RES_W_SBG_Sv2(:,:,:,JSV), .TRUE. )
+    ZWKLES = MZF(PWM)*ZFLX
+    CALL LES_MEAN_SUBGRID( ZWKLES, TLES%X_LES_RES_W_SBG_Sv2(:,:,:,JSV), .TRUE. )
   END IF
   !
   ! covariance SvThv
@@ -168,8 +170,10 @@ DO JSV=1,KSV
               * GX_M_M(OFLAT,PTHLM,PDXX,PDZZ,PDZX) * GX_M_M(OFLAT,PSVM(:,:,:,JSV),PDXX,PDZZ,PDZX)  &
               * (TURBN%XCSHF+ZCSV) / (2.*ZCTSVD)
     END IF
-    CALL LES_MEAN_SUBGRID( ZA*ZFLX, TLES%X_LES_SUBGRID_SvThv(:,:,:,JSV) , .TRUE.)
-    CALL LES_MEAN_SUBGRID( -CST%XG/PTHVREF/3.*ZA*ZFLX, TLES%X_LES_SUBGRID_SvPz(:,:,:,JSV), .TRUE. )
+    ZWKLES = ZA*ZFLX
+    CALL LES_MEAN_SUBGRID( ZWKLES, TLES%X_LES_SUBGRID_SvThv(:,:,:,JSV) , .TRUE.)
+    ZWKLES = -CST%XG/PTHVREF/3.*ZA*ZFLX
+    CALL LES_MEAN_SUBGRID( ZWKLES, TLES%X_LES_SUBGRID_SvPz(:,:,:,JSV), .TRUE. )
     !
     IF (KRR>=1) THEN
       CALL  EMOIST(D,CST,KRR,KRRI,PTHLM,PRM,PLOCPEXNM,PAMOIST,PSRCM,OOCEAN,ZA)
@@ -183,8 +187,10 @@ DO JSV=1,KSV
                 * GX_M_M(OFLAT,PRM(:,:,:,1),PDXX,PDZZ,PDZX) * GX_M_M(OFLAT,PSVM(:,:,:,JSV),PDXX,PDZZ,PDZX)  &
                 * (TURBN%XCHF+ZCSV) / (2.*ZCQSVD)
       END IF
-      CALL LES_MEAN_SUBGRID( ZA*ZFLX, TLES%X_LES_SUBGRID_SvThv(:,:,:,JSV) , .TRUE.)
-      CALL LES_MEAN_SUBGRID( -CST%XG/PTHVREF/3.*ZA*ZFLX, TLES%X_LES_SUBGRID_SvPz(:,:,:,JSV), .TRUE. )
+      ZWKLES = ZA*ZFLX
+      CALL LES_MEAN_SUBGRID( ZWKLES, TLES%X_LES_SUBGRID_SvThv(:,:,:,JSV) , .TRUE.)
+      ZWKLES = -CST%XG/PTHVREF/3.*ZA*ZFLX
+      CALL LES_MEAN_SUBGRID( ZWKLES, TLES%X_LES_SUBGRID_SvPz(:,:,:,JSV), .TRUE. )
     END IF
   END IF
 !
