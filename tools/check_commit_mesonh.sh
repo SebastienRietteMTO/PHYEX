@@ -321,15 +321,15 @@ if [ $packupdate -eq 1 -o $packcreation -eq 1 ]; then
     if [ "$fromdir" == '' ]; then
       echo "Clone repository, and checkout commit $commit (using prep_code.sh)"
       if [[ $commit == mesonh${separator}* ]]; then
-        $prep_code $prepCodeOpts --renameFf --ilooprm -c $commit PHYEX #This commit is ready for inclusion
+        $prep_code $prepCodeOpts --renameFf --ilooprm --noRaiseOnCodingNorms -c $commit PHYEX #This commit is ready for inclusion
       else
-        $prep_code $prepCodeOpts --renameFf --ilooprm $expand_options -c $commit $subs -m mesonh PHYEX -- --removeExtraDOinMnhDoConcurrent
+        $prep_code $prepCodeOpts --renameFf --ilooprm --noRaiseOnCodingNorms $expand_options -c $commit $subs -m mesonh PHYEX -- --removeExtraDOinMnhDoConcurrent
       fi
     else
       echo "Copy $fromdir"
       mkdir PHYEX
       scp -q -r $fromdir/src PHYEX/
-      $prep_code $prepCodeOpts --renameFf --ilooprm $expand_options $subs -m mesonh PHYEX -- --removeExtraDOinMnhDoConcurrent
+      $prep_code $prepCodeOpts --renameFf --ilooprm --noRaiseOnCodingNorms $expand_options $subs -m mesonh PHYEX -- --removeExtraDOinMnhDoConcurrent
     fi
     rm -rf PHYEX/.git
     find PHYEX -type f -exec touch {} \; #to be sure a recompilation occurs

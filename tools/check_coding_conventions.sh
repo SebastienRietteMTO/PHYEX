@@ -10,7 +10,8 @@ set -o pipefail #abort if left command on a pipe fails
 # - that there is no (:) in subroutine call
 # - the absence of unused local variables
 # - that mode_ice4_pack and mode_ice4_stepping have the same interface
-# # the presence of ONLY clause in USE statements
+# - the presence of ONLY clause in USE statements
+# - that there is no operations in CALL statements
 
 PHYEXTOOLSDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -82,6 +83,7 @@ result=$(pyfortool_parallel --tree $SOURCEDIR --descTree $JSONDIR/tree.json \
                             --checkIMPLICIT Warn --checkINTENT Warn \
                             --checkONLY Warn \
                             --checkPHYEXUnusedLocalVar Warn \
+                            --checkOpInCall Warn \
                             --checkEmptyParensInCall Warn 2>&1)
 [ "$result" != "" ] && check=false
 result_all="${result_all}\n${result}"

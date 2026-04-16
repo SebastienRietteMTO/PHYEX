@@ -17,6 +17,7 @@ PHYEXTOOLSDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 function usage {
   echo "Usage: $0 [-h] [-c CHECKOUT_POINT] [-m MODEL] [-D OPTION [-D OPTION [...]]]] \\"
   echo "          [-s SUBDIR [-s SUBDIR [...]]] [--pyfortool_opts_env VAR] [-v [-v [-v]]] \\"
+  echo "          [--noRaiseOnCodingNorms] \\"
   echo "          DIRECTORY -- PYFORTOOL_OPTIONS"
   echo "DIRECTORY             directory containing the script result"
   echo "-c CHECKOUT_POINT     git object to checkout, can be a specific commit"
@@ -30,6 +31,7 @@ function usage {
   echo "--ilooprm             replace indexes in do loop (and mnh_expand) by :"
   echo "--repo                use this repository instead of the one derived (if any) from the env variables"
   echo "                      PHYEXREPOuser (=$PHYEXREPOuser) and PHYEXREPOprotocol (=$PHYEXREPOprotocol)"
+  echo "--noRaiseOnCodingNorms Deactivate the blocking check on coding norms"
   echo "-v                    add verbosity (up to 3 -v)"
   echo "--pyfortool_opts_env VAR   name of an environment variable containing options to use to call"
   echo "                      the pyfortool script"
@@ -85,6 +87,7 @@ ilooprm=0
 useParallelPyForTool=0
 forpyfortool=0
 pyfortool_opts_env=""
+raiseOnCodingNorms=true
 
 if [ -z "${PHYEXREPOprotocol-}" ]; then
   repository=""
@@ -113,6 +116,7 @@ while [ -n "$1" ]; do
     '-v') verbose=$(($verbose+1));;
     '--useParallelPyForTool') useParallelPyForTool=1;;
     '--pyfortool_opts_env') pyfortool_opts_env=$2; shift;;
+    '--noRaiseOnCodingNorms') raiseOnCodingNorms=false;;
     '--') forpyfortool=1;;
      *) if [ $forpyfortool -eq 0 ]; then
           directory="$1"
@@ -350,7 +354,12 @@ for rep in $PWD/*; do
   if [ $(basename "${rep}") != 'ext' ]; then
     set +e
     $PHYEXTOOLSDIR/check_coding_conventions.sh -v --source ${rep}
+    statuscode=$?
     set -e
+    if [ $raiseOnCodingNorms == true -a $statuscode != 0 ]; then
+      echo "Errors occurred during code norms verification => STOP"
+      exit 9
+    fi
   fi
 done
 
