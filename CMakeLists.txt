@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 find_package(ecbuild 3.11 REQUIRED HINTS ${CMAKE_SOURCE_DIR})
-project(PHYEX VERSION 1.0 LANGUAGES Fortran)
+project(phyex VERSION 1.0 LANGUAGES Fortran)
 
 include(phyex_macros)
 
@@ -16,9 +16,16 @@ ecbuild_add_option(FEATURE SINGLE_PRECISION
                    DESCRIPTION "Compile on single precision"
                    DEFAULT OFF)
 
+ecbuild_add_option(FEATURE IFS_FLAGS
+                   DESCRIPTION "Compile with IFS flags"
+                   DEFAULT OFF)
+
 ecbuild_add_option(FEATURE PHYEX_BUILD_PROGS
                    DESCRIPTION "Build PHYEX program executables"
                    DEFAULT OFF)
+ecbuild_add_option(FEATURE OMP
+                   DESCRIPTION "Support for OpenMP shared memory parallelism"
+                   REQUIRED_PACKAGES "OpenMP COMPONENTS Fortran" )
 
 if(HAVE_DOUBLE_PRECISION)
   list(APPEND precision_list dp) 
@@ -104,7 +111,6 @@ foreach(PRECISION ${precision_list})
     SOURCES ${PHYEX_SOURCES}
     PUBLIC_LIBS
       fiat
-      mpi_serial
       parkind_${PRECISION}
     PUBLIC_INCLUDES ${PHYEX_HEADERS}
     INSTALL_HEADERS ALL
@@ -112,9 +118,18 @@ foreach(PRECISION ${precision_list})
     PUBLIC_INCLUDES ${PHYEX_INCLUDEDIRS}
   ) 
 
+  if( HAVE_OMP )
+    target_link_libraries(phyex_${PRECISION} PRIVATE OpenMP::OpenMP_Fortran )
+  endif()
+
   # Compilation option to use for unqualified REALs
   target_compile_options(phyex_${PRECISION} PUBLIC
     $<$<COMPILE_LANGUAGE:Fortran>:${PHYEX_COMPILE_OPTIONS_REAL}>)
+
+  if(HAVE_IFS_FLAGS)
+    target_compile_options(phyex_${PRECISION} PRIVATE
+    ${ECBUILD_IFS_Fortran_FLAGS})
+  endif()
 
   # Install Library 
   install(
@@ -148,6 +163,11 @@ foreach(PRECISION ${precision_list})
           parkind_${PRECISION}
         OUTPUT_NAME ${NAME}_${PRECISION}.exe
       )
+
+      if( HAVE_OMP )
+        target_link_libraries(${NAME} PRIVATE OpenMP::OpenMP_Fortran )
+      endif()
+
       if(DEFINED FPP_FLAGS_TESTPROGS)
         target_compile_definitions(${NAME}_${PRECISION} PUBLIC ${FPP_FLAGS_TESTPROGS})
       endif()
