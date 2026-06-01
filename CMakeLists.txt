@@ -23,9 +23,14 @@ ecbuild_add_option(FEATURE IFS_FLAGS
 ecbuild_add_option(FEATURE PHYEX_BUILD_PROGS
                    DESCRIPTION "Build PHYEX program executables"
                    DEFAULT OFF)
+
 ecbuild_add_option(FEATURE OMP
                    DESCRIPTION "Support for OpenMP shared memory parallelism"
-                   REQUIRED_PACKAGES "OpenMP COMPONENTS Fortran" )
+                   REQUIRED_PACKAGES "OpenMP COMPONENTS Fortran")
+
+ecbuild_add_option(FEATURE ACC
+                   DESCRIPTION "Support for OpenACC"
+                   REQUIRED_PACKAGES "OpenACC COMPONENTS Fortran")
 
 if(HAVE_DOUBLE_PRECISION)
   list(APPEND precision_list dp) 
@@ -118,8 +123,12 @@ foreach(PRECISION ${precision_list})
     PUBLIC_INCLUDES ${PHYEX_INCLUDEDIRS}
   ) 
 
-  if( HAVE_OMP )
-    target_link_libraries(phyex_${PRECISION} PRIVATE OpenMP::OpenMP_Fortran )
+  if(HAVE_OMP)
+    target_link_libraries(phyex_${PRECISION} PRIVATE OpenMP::OpenMP_Fortran)
+  endif()
+
+  if(HAVE_ACC)
+    target_link_libraries(phyex_${PRECISION} PRIVATE OpenACC::OpenACC_Fortran)
   endif()
 
   # Compilation option to use for unqualified REALs
@@ -164,8 +173,12 @@ foreach(PRECISION ${precision_list})
         OUTPUT_NAME ${NAME}_${PRECISION}.exe
       )
 
-      if( HAVE_OMP )
-        target_link_libraries(${NAME} PRIVATE OpenMP::OpenMP_Fortran )
+      if(HAVE_OMP)
+        target_link_libraries(${NAME} PRIVATE OpenMP::OpenMP_Fortran)
+      endif()
+
+      if(HAVE_ACC)
+        target_link_libraries(${NAME} PRIVATE OpenACC::OpenACC_Fortran)
       endif()
 
       if(DEFINED FPP_FLAGS_TESTPROGS)
