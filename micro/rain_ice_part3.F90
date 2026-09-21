@@ -5,6 +5,7 @@
 !-----------------------------------------------------------------
 !     ######spl
        SUBROUTINE RAIN_ICE_PART3 ( D, CST, PARAMI, ICEP, ICED, ELECP, ELECD, BUCONF,     &
+                                   LIMAP, LIMAC, LIMAM,                                  &
                                    OELEC, OSEDIM_BEARD, PTHVREFZIKB,                     &
                                    PTSTEP, KRR,                                    &
                                    PDZZ, PRHODJ, PRHODREF, PEXNREF, PPABST, PCIT, &
@@ -19,6 +20,9 @@
                                    PINPRH, PFPR, PQHT, PQHS,                             &
                                    PT, PLVFACT, PLSFACT, PWR, PWTH, PCONC3D, PRVHENI,   &
                                    ZBUDGETS )
+
+!$ACDC singlecolumn --nocreate-interface
+
 !     #############################################################################
 !!!****  * -  compute the explicit microphysical sources
 !!
@@ -46,8 +50,6 @@
 !!
 !!    IMPLICIT ARGUMENTS
 !!    ------------------
-!!      Module MODD_CONF :
-!!          CCONF configuration of the model for the first time step
 !!      Module MODD_CST
 !!          XP00               ! Reference pressure
 !!          XRD,XRV            ! Gaz  constant for dry air, vapor
@@ -178,6 +180,9 @@ USE MODE_ICE4_BUDGETS,       ONLY: ICE4_BUDGETS
 USE MODE_ICE4_CORRECT_NEGATIVITIES, ONLY: ICE4_CORRECT_NEGATIVITIES
 
 USE MODE_ELEC_TENDENCIES, ONLY : ELEC_TENDENCIES
+USE MODD_PARAM_LIMA_MIXED,ONLY:PARAM_LIMA_MIXED_T
+USE MODD_PARAM_LIMA_COLD, ONLY:PARAM_LIMA_COLD_T
+USE MODD_PARAM_LIMA,      ONLY:PARAM_LIMA_T
 
 IMPLICIT NONE
 !
@@ -192,6 +197,9 @@ TYPE(RAIN_ICE_PARAM_t),   INTENT(IN)    :: ICEP
 TYPE(RAIN_ICE_DESCR_t),   INTENT(IN)    :: ICED
 TYPE(ELEC_PARAM_t),       INTENT(IN)    :: ELECP   ! electrical parameters
 TYPE(ELEC_DESCR_t),       INTENT(IN)    :: ELECD   ! electrical descriptive csts
+TYPE(PARAM_LIMA_T),       INTENT(IN)    :: LIMAP
+TYPE(PARAM_LIMA_COLD_T),  INTENT(IN)    :: LIMAC
+TYPE(PARAM_LIMA_MIXED_T), INTENT(IN)    :: LIMAM
 TYPE(TBUDGETCONF_t),      INTENT(IN)    :: BUCONF
 LOGICAL,                  INTENT(IN)    :: OELEC  ! Switch for cloud electricity
 LOGICAL,                  INTENT(IN)    :: OSEDIM_BEARD  ! Switch for effect of electrical forces on sedim.
@@ -332,6 +340,7 @@ IF (OELEC) THEN
   !
   IF (KRR == 7) THEN
     CALL ELEC_TENDENCIES(D, CST, ICED, ICEP, ELECD, ELECP,                                    &
+                         LIMAP, LIMAC, LIMAM,                                                 &
                          KRR, IELEC, PTSTEP, GMASK_ELEC,                                      &
                          BUCONF, TBUDGETS, KBUDGETS,                                          &
                          'ICE4', PTHVREFZIKB, PRHODREF, PRHODJ, PT, PCIT,                     &
@@ -365,6 +374,7 @@ IF (OELEC) THEN
                          PRHT=PRT(:,:,IRH), PQHT=PQHT, PQHS=PQHS                       )
   ELSE
     CALL ELEC_TENDENCIES(D, CST, ICED, ICEP, ELECD, ELECP,                                   &
+                         LIMAP, LIMAC, LIMAM,                                                &
                          KRR, IELEC, PTSTEP, GMASK_ELEC,                                     &
                          BUCONF, TBUDGETS, KBUDGETS,                                         &
                          'ICE3', PTHVREFZIKB, PRHODREF, PRHODJ, PT, PCIT,                    &

@@ -17,6 +17,9 @@ SUBROUTINE ICE4_SEDIMENTATION_SPLIT(D, CST, ICEP, ICED, PARAMI, ELECP, ELECD, &
                                    &PSEA, PTOWN,  &
                                    &PINPRH, PFPR, &
                                    &PQHT, PQHS)
+
+!$ACDC singlecolumn --dummy
+
 !!
 !!**  PURPOSE
 !!    -------
@@ -357,7 +360,8 @@ USE MODD_ELEC_DESCR,     ONLY: ELEC_DESCR_t
 USE MODI_MOMG, ONLY: MOMG
 !
 USE MODE_ELEC_BEARD_EFFECT, ONLY: ELEC_BEARD_EFFECT
-USE MODE_MSG, ONLY: PRINT_MSG, NVERB_FATAL
+USE MODE_MSG, ONLY: PRINT_MSG 
+USE MODD_IO, ONLY:NVERB_FATAL
 !
 IMPLICIT NONE
 !
@@ -729,7 +733,7 @@ DO WHILE (GANYREMAINT)
 
 
     
-    !$mnh_do_concurrent(JIJ=IIJB:IIJE , JK=IKTB:IKTE,OPENACC='private(ZEXT)' )
+    !$mnh_do_concurrent(JIJ=IIJB:IIJE , JK=IKTB:IKTE,OPENACC=' private(ZEXTT)' )
     DO JK = IKTB,IKTE
       DO JIJ = IIJB,IIJE
         IF(PRXT(JIJ,JK)>ICED%XRTMIN(KSPE) .AND. ZREMAINT(JIJ)>0.) THEN
@@ -805,8 +809,7 @@ DO WHILE (GANYREMAINT)
   ENDDO
 
 
-
-!$mnh_do_concurrent(JIJ=IIJB:IIJE , JK=IKTB:IKTE, OPENACC='private(ZMRCHANGE,ZQCHANGE)' )
+!$mnh_do_concurrent(JIJ=IIJB:IIJE , JK=IKTB:IKTE, OPENACC=' private(ZMRCHANGE,ZQCHANGE)' )
    DO JK = IKTB , IKTE
     DO JIJ = IIJB, IIJE
       ZMRCHANGE = ZMAX_TSTEP1D(JIJ) * POORHODZ(JIJ,JK)*(ZWSED(JIJ,JK+IKL)-ZWSED(JIJ,JK))
