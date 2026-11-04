@@ -1,7 +1,7 @@
 <map id="mode_ice4_sedimentation::ice4_sedimentation" name="mode_ice4_sedimentation::ice4_sedimentation">
-<area shape="rect" id="Node000001" title=" " alt="" coords="168,23,363,63"/>
-<area shape="rect" id="Node000002" href="$rain__ice__part1_8F90.html#a0754f0f198bde13ed950ba6b4aec6f0f" title=" " alt="" coords="5,5,120,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,32,120,28,121,22,155,27"/>
-<area shape="rect" id="Node000003" href="$rain__ice__part3_8F90.html#a06c3d164de603312b22e7d92bb33487a" title=" " alt="" coords="5,55,120,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="155,59,121,63,120,58,154,54"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="167,24,360,68"/>
+<area shape="rect" id="Node000002" href="$rain__ice__part1_8F90.html#a0754f0f198bde13ed950ba6b4aec6f0f" title=" " alt="" coords="5,5,119,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,32,119,29,119,24,154,30"/>
+<area shape="rect" id="Node000003" href="$rain__ice__part3_8F90.html#a06c3d164de603312b22e7d92bb33487a" title=" " alt="" coords="5,57,119,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,60,120,67,119,61,154,60"/>
 </map>
