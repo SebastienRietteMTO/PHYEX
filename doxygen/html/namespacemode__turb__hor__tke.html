@@ -117,67 +117,67 @@ Functions/Subroutines</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdxx</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdxx</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdyy</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdyy</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdzz</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdzz</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdzx</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdzx</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdzy</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pdzy</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pinv_pdxx</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pinv_pdxx</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pinv_pdyy</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pinv_pdyy</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pinv_pdzz</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pinv_pdzz</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pmzm_prhodj</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pmzm_prhodj</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pk</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>pk</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>prhodj</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>prhodj</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>ptkem</em></span>, </td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(in)</td>          <td class="paramname"><span class="paramname"><em>ptkem</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(d%nit,d%njt,d%nkt), intent(out)</td>          <td class="paramname"><span class="paramname"><em>ptrh</em></span>&#160;)</td>
+          <td class="paramtype">real, dimension(d%nijt,d%nkt), intent(out)</td>          <td class="paramname"><span class="paramname"><em>ptrh</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -188,11 +188,63 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="namespacemode__turb__hor__tke_a21f7c9335828c879eaf7565b4f19c365_cgraph.png" border="0" usemap="#anamespacemode__turb__hor__tke_a21f7c9335828c879eaf7565b4f19c365_cgraph" loading="lazy" alt=""/></div>
 <map name="anamespacemode__turb__hor__tke_a21f7c9335828c879eaf7565b4f19c365_cgraph" id="anamespacemode__turb__hor__tke_a21f7c9335828c879eaf7565b4f19c365_cgraph">
-<area shape="rect" title=" " alt="" coords="5,24,160,68"/>
-<area shape="rect" href="namespacemodi__gradient__m.html#a958536529dcbcf5b85625a005eabfcd2" title=" " alt="" coords="208,5,402,33"/>
-<area shape="poly" title=" " alt="" coords="160,34,195,32,190,33,161,39"/>
-<area shape="rect" href="namespacemodi__gradient__m.html#a9875ad929f43c437c303857db6496df2" title=" " alt="" coords="208,57,402,85"/>
-<area shape="poly" title=" " alt="" coords="160,52,195,58,190,59,160,57"/>
+<area shape="rect" title=" " alt="" coords="5,369,160,414"/>
+<area shape="rect" href="shugrad_8h.html#a385c9cd68b2d9f0eeba9346f10a2b1e2" title=" " alt="" coords="223,7,265,34"/>
+<area shape="poly" title=" " alt="" coords="85,368,97,308,120,225,155,133,178,87,206,46,213,40,210,45,210,49,183,90,160,135,125,226,102,309,90,369"/>
+<area shape="rect" href="shugrad_8h.html#a70720c1ee7f7e19ba33917749bf6eac0" title=" " alt="" coords="211,59,277,86"/>
+<area shape="poly" title=" " alt="" coords="87,368,102,316,126,247,161,171,205,99,212,95,209,100,210,102,165,173,131,249,107,318,92,369"/>
+<area shape="rect" href="shugrad_8h.html#a01a27da7e482ab76bebe752cc3dedf09" title=" " alt="" coords="223,112,265,140"/>
+<area shape="poly" title=" " alt="" coords="90,367,133,270,166,210,206,154,213,148,211,152,210,157,171,213,138,273,95,369"/>
+<area shape="rect" href="shugrad_8h.html#a5f79357bbe289ef2b28571ef4320258b" title=" " alt="" coords="211,167,277,194"/>
+<area shape="poly" title=" " alt="" coords="95,367,141,294,206,209,215,203,212,208,210,213,145,297,99,369"/>
+<area shape="rect" href="shugrad_8h.html#a5d6337dfad80c0172fa71780b5d4903b" title=" " alt="" coords="223,223,264,250"/>
+<area shape="poly" title=" " alt="" coords="105,367,218,259,216,264,109,370"/>
+<area shape="rect" href="shugrad_8h.html#ae0650da6257382c0b9d93ac3857ec1d5" title=" " alt="" coords="208,284,280,312"/>
+<area shape="poly" title=" " alt="" coords="121,366,206,318,204,322,125,370"/>
+<area shape="rect" href="shugrad_8h.html#a67ccda31f8eaa0da46ac30561c8dab9f" title=" " alt="" coords="208,347,280,374"/>
+<area shape="poly" title=" " alt="" coords="158,374,194,368,190,372,161,379"/>
+<area shape="rect" href="shugrad_8h.html#a98b05500e5d00f5ab8af75ea445a0196" title=" " alt="" coords="220,403,268,430"/>
+<area shape="poly" title=" " alt="" coords="159,401,207,409,203,412,161,406"/>
+<area shape="rect" href="shugrad_8h.html#a7d3f3010bb0238ab6b25c1115d9ae9e0" title=" " alt="" coords="216,455,272,482"/>
+<area shape="poly" title=" " alt="" coords="131,412,205,448,200,450,131,417"/>
+<area shape="rect" href="shugrad_8h.html#abe77a2a9b1ed85d3723267bf0e73cbb2" title=" " alt="" coords="208,507,280,534"/>
+<area shape="poly" title=" " alt="" coords="111,411,209,492,214,497,209,497,206,496,110,417"/>
+<area shape="rect" href="shugrad_8h.html#a795872949ffd376b108c823a04489fad" title=" " alt="" coords="220,559,268,586"/>
+<area shape="poly" title=" " alt="" coords="100,411,148,474,210,544,213,548,208,548,206,548,143,478,99,417"/>
+<area shape="rect" href="shugrad_8h.html#a20694c187fee711c0ef2bfb27c5ccd44" title=" " alt="" coords="216,611,272,638"/>
+<area shape="poly" title=" " alt="" coords="95,411,140,498,172,548,210,596,213,601,207,600,206,600,168,551,136,500,94,417"/>
+<area shape="rect" href="shugrad_8h.html#ad4e9c09384c256bf7347f0f15790835f" title=" " alt="" coords="208,663,280,690"/>
+<area shape="poly" title=" " alt="" coords="91,411,109,459,134,520,168,586,210,648,212,652,207,651,206,651,163,589,129,522,104,461,91,417"/>
+<area shape="rect" href="shugrad_8h.html#abacd9e8cce2826c376c2874e230a9d29" title=" " alt="" coords="217,715,271,742"/>
+<area shape="poly" title=" " alt="" coords="89,411,105,468,128,542,163,624,185,663,210,700,211,704,206,703,206,703,180,666,158,626,123,544,100,469,88,417"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#ad1f46fbcb602580b47426b961da805a8" title=" " alt="" coords="342,5,550,33"/>
+<area shape="poly" title=" " alt="" coords="264,18,329,18,325,22,267,23"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#a712355481770b943f6a38e726a10270b" title=" " alt="" coords="330,57,562,85"/>
+<area shape="poly" title=" " alt="" coords="276,70,317,70,313,74,279,75"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#a191f841104f424a01825322f617985de" title=" " alt="" coords="342,109,550,137"/>
+<area shape="poly" title=" " alt="" coords="264,123,329,123,325,126,267,128"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#a6b17b37f9f1d4c1fdfba9be790afdb3b" title=" " alt="" coords="330,161,562,189"/>
+<area shape="poly" title=" " alt="" coords="276,177,317,177,313,180,279,182"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#ae898ed480a8ca1c64c3bdc70d9819873" title=" " alt="" coords="343,213,549,241"/>
+<area shape="poly" title=" " alt="" coords="264,233,330,231,325,234,266,238"/>
+<area shape="rect" href="namespacemode__gradient__m__phy.html#a1d01248f648bab96433dc23eddaaa898" title=" " alt="" coords="361,265,531,310"/>
+<area shape="poly" title=" " alt="" coords="279,294,348,291,343,294,282,298"/>
+<area shape="rect" href="namespacemode__gradient__m__phy.html#a8941f997f819b6ece6300491d07ac24e" title=" " alt="" coords="361,334,531,379"/>
+<area shape="poly" title=" " alt="" coords="279,357,348,357,343,360,281,362"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#a1c4329981fbefbc265709f1515123cf0" title=" " alt="" coords="340,403,552,430"/>
+<area shape="poly" title=" " alt="" coords="267,414,327,415,322,418,269,419"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#ad7e5b1c3c9f74262b10ca07db9ca6893" title=" " alt="" coords="336,455,556,482"/>
+<area shape="poly" title=" " alt="" coords="271,466,322,467,318,470,273,471"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#a40d65f902e536e7efe80e6b0fa610bd8" title=" " alt="" coords="328,507,564,534"/>
+<area shape="poly" title=" " alt="" coords="279,518,315,520,310,521,281,523"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#ae651e59d4c09e8187d0292f473eaaf33" title=" " alt="" coords="340,559,552,586"/>
+<area shape="poly" title=" " alt="" coords="268,570,327,572,322,573,269,575"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#a022e15d54f09a2283f66868ffa20e725" title=" " alt="" coords="336,611,556,638"/>
+<area shape="poly" title=" " alt="" coords="272,622,323,624,317,625,273,627"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#a2f055f5b655f5462578da40938f85425" title=" " alt="" coords="328,663,564,690"/>
+<area shape="poly" title=" " alt="" coords="280,674,315,676,310,677,280,679"/>
+<area shape="rect" href="namespacemode__shuman__phy.html#a86441e6781603bb2b6b1f30d8c0e39b4" title=" " alt="" coords="336,715,556,742"/>
+<area shape="poly" title=" " alt="" coords="271,726,323,728,318,729,271,731"/>
 </map>
 </div>
 <div class="dynheader">
