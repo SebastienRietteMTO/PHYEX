@@ -17,7 +17,7 @@ var searchData=
   ['tridiag_5ftke_14',['tridiag_tke',['../namespacemode__tridiag__tke.html#a7c2b147475a5a8c8025462c332fedd5f',1,'mode_tridiag_tke']]],
   ['tridiag_5fw_15',['tridiag_w',['../namespacemode__tridiag__w.html#a797db0f28331c854bef16325e6a47479',1,'mode_tridiag_w']]],
   ['tridiag_5fwind_16',['tridiag_wind',['../namespacemode__tridiag__wind.html#afee635ec12a0577e6a297f4bdcca41f6',1,'mode_tridiag_wind']]],
-  ['turb_17',['turb',['../interfacemodi__turb_1_1turb.html#a8b645e2ff61cbf02cc3096d05d4c3f5e',1,'modi_turb::turb::turb()'],['../turb_8F90.html#a23227e569d418665dfb37602bf10a2f5',1,'turb():&#160;turb.F90']]],
+  ['turb_17',['turb',['../turb_8F90.html#a23227e569d418665dfb37602bf10a2f5',1,'turb.F90']]],
   ['turb_5fgoto_5fmodel_18',['turb_goto_model',['../namespacemodd__turb__n.html#a7640f9d7b7f07eb82629558fc4b4bee6',1,'modd_turb_n']]],
   ['turb_5fhor_19',['turb_hor',['../namespacemode__turb__hor.html#a392ed5235673e3faa3d5c1f17974a7cc',1,'mode_turb_hor']]],
   ['turb_5fhor_5fdyn_5fcorr_20',['turb_hor_dyn_corr',['../namespacemode__turb__hor__dyn__corr.html#a06b95eda0366712b196aa5d42934f98d',1,'mode_turb_hor_dyn_corr']]],

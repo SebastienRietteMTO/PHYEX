@@ -1,5 +1,7 @@
 <map id="mode_lima_init_ccn_activation_spectrum::lima_init_ccn_activation_spectrum" name="mode_lima_init_ccn_activation_spectrum::lima_init_ccn_activation_spectrum">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,193,84"/>
-<area shape="rect" id="Node000002" href="$mode__lima__init__ccn__activation__spectrum_8F90.html#a2600533fa11024da60402db44ce4686c" title=" " alt="" coords="241,31,299,58"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,42,228,44,222,45,193,47"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,6,193,85"/>
+<area shape="rect" id="Node000002" href="$gamma__inc_8F90.html#aef6cc1ff21be604c8916180e8b312764" title=" " alt="" coords="241,5,338,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,30,228,28,222,29,194,35"/>
+<area shape="rect" id="Node000003" href="$mode__lima__init__ccn__activation__spectrum_8F90.html#a2600533fa11024da60402db44ce4686c" title=" " alt="" coords="260,57,318,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,56,247,65,242,65,193,61"/>
 </map>
