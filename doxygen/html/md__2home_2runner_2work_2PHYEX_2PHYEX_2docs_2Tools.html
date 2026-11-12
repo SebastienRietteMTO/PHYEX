@@ -116,6 +116,10 @@ prep_code.sh</h2>
 testing.sh</h2>
 <p>This script is designed to be run periodically by cron. It searches for the last commit on a github repository, use the different check_commit_* scripts to run the test cases and add a comments attached to the gihub commit to report success or unsecess of these tests. In case of an error, the script can also send an email.</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md82"></a>
+phyex-check_commit</h2>
+<p>This command performs all the checks (consistency, coding norms, documentation generation, python wheel creation and the test cases of IAL, Meso-NH, testprogs and LMDZ) on the repository containing the tools (with its uncommitted modifications); the &ndash;only option restricts the checks. The report is written on the standard output; it can also be sent by email in case of an error (&ndash;mail) and attached as a status to a github commit (&ndash;github-status, the API url to use must be given).</p>
+<p>Options can be displayed with the -h option.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md83"></a>
 others</h2>
 <p>Other scripts are:</p>
 <ul>
