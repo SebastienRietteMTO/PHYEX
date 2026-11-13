@@ -278,7 +278,7 @@ WHERE( GDRY(:) )
                     - Z4(:)*(ZVEC2(:) - 1.0) ) &
                                                     * (ZVEC1(:) - 1.0)
    ZZW(:) = ZVEC3(:)
-   ZZW3N(:) = LIMAM%XFNSDRYG * ZZW(:) * EXP( LIMAM%XCOLEXSG*(PT(:)-CST%XTT) )        & ! NSDRYG - Ns collected by graupel in dry mode
+   ZZW3N(:) = LIMAM%XFNSDRYG * ZZW(:) * EXP( LIMAM%XCOLEXSG*(PT(:)-CST%XTT) )      & ! NSDRYG - Ns collected by graupel in dry mode
                       *  PCST(:) * PCGT(:)                           &
                       *  PRHODREF(:)**(1-LIMAP%XCEXVT)                     &
                       *( LIMAM%XLBNSDRYG1/( PLBDG(:)**2                ) + &
@@ -396,7 +396,8 @@ ZZW(:) = 0.0
 IHAIL = 0.
 IF (LIMAP%NMOM_H.GE.1) IHAIL = 1. 
 !
-WHERE( ODCOMPUTE(:) .AND. PRGT(:)>LIMAP%XRTMIN(6) .AND. PCGT(:)>LIMAP%XCTMIN(6) .AND. ZZW1(:)+ZZW4(:)>=ZRLWETG(:) .AND. ZZW1(:)+ZZW4(:)>0. )
+WHERE( ODCOMPUTE(:) .AND. PRGT(:)>LIMAP%XRTMIN(6) .AND. PCGT(:)>LIMAP%XCTMIN(6) .AND. ZZW1(:)+ZZW4(:)>=ZRLWETG(:) &
+  & .AND. ZZW1(:)+ZZW4(:)>0. )
 !
 ! assume a linear percent of conversion of graupel into hail
 ! ZZW = percentage of graupel transformed

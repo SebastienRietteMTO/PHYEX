@@ -170,7 +170,7 @@ INTEGER, DIMENSION(D%NIJT)  :: ITPL            ! top levels of troposphere
 REAL,    DIMENSION(D%NIJT)  :: ZTMIN           ! minimum Temp. related to ITPL
 !
 REAL, DIMENSION(D%NIJT,D%NKT) :: ZLV, ZLS, ZCPD
-REAL, DIMENSION(D%NIJT,D%NKT) :: ZGCOND, ZAUTC, ZAUTI, ZGAUV, ZGAUC, ZGAUI, ZGAUTC, ZGAUTI, ZCRIAUTI   ! Used for Gaussian PDF integration
+REAL, DIMENSION(D%NIJT,D%NKT) :: ZGCOND, ZAUTC, ZAUTI, ZGAUV, ZGAUC, ZGAUI, ZGAUTC, ZGAUTI, ZCRIAUTI ! Used for Gaussian PDF
 REAL, DIMENSION(D%NIJT,D%NKT) :: ZLVS                                      ! thermodynamics
 REAL, DIMENSION(D%NIJT,D%NKT) :: ZPV, ZPIV, ZQSL, ZQSI ! thermodynamics
 REAL, DIMENSION(D%NIJT,D%NKT) :: ZLL, DZZ, ZZZ                           ! used for length scales
@@ -477,7 +477,8 @@ DO JK=IKTB,IKTE
       IF(LMFCONV) ZSIG_CONV(JIJ,JK) = ZCSIG_CONV * PMFCONV(JIJ,JK) / ZA(JIJ,JK)
       ! zsigma should be of order 4.e-4 in lowest 5 km of atmosphere
       ZSIGMA(JIJ,JK) =  SQRT( MAX( 1.E-25, ZCSIGMA * ZCSIGMA * ZLL(JIJ,JK)*ZLL(JIJ,JK)/(DZZ(JIJ,JK)*DZZ(JIJ,JK))*(&
-           ZA(JIJ,JK)*ZA(JIJ,JK)*ZDRW(JIJ,JK)*ZDRW(JIJ,JK) - 2.*ZA(JIJ,JK)*ZB(JIJ,JK)*ZDRW(JIJ,JK)*ZDTL(JIJ,JK) + ZB(JIJ,JK)*ZB(JIJ,JK)*ZDTL(JIJ,JK)*ZDTL(JIJ,JK)) + &
+           ZA(JIJ,JK)*ZA(JIJ,JK)*ZDRW(JIJ,JK)*ZDRW(JIJ,JK) - 2.*ZA(JIJ,JK)*ZB(JIJ,JK)*ZDRW(JIJ,JK)*ZDTL(JIJ,JK) + &
+             & ZB(JIJ,JK)*ZB(JIJ,JK)*ZDTL(JIJ,JK)*ZDTL(JIJ,JK)) + &
            ZSIG_CONV(JIJ,JK) * ZSIG_CONV(JIJ,JK) ) )
   END IF
     ZSIGMA(JIJ,JK)= MAX( 1.E-10, ZSIGMA(JIJ,JK) )
@@ -513,7 +514,8 @@ DO JK=IKTB,IKTE
           ZGAUTC(JIJ,JK) = -ZAUTC(JIJ,JK)/SQRT(2.)
           ZGAUC(JIJ,JK) = 1 + ERF(-ZGAUTC(JIJ,JK))
           PHLC_HCF(JIJ,JK) = MAX( 0., MIN(1.,0.5*ZGAUC(JIJ,JK)))
-          PHLC_HRC(JIJ,JK) = (1-ZFRAC(JIJ,JK))*(EXP(-ZGAUTC(JIJ,JK)**2)-ZGAUTC(JIJ,JK)*SQRT(CST%XPI)*ZGAUC(JIJ,JK))*ZSIGMA(JIJ,JK)/SQRT(2.*CST%XPI)
+          PHLC_HRC(JIJ,JK) = (1-ZFRAC(JIJ,JK))*(EXP(-ZGAUTC(JIJ,JK)**2)-ZGAUTC(JIJ,JK)*SQRT(CST%XPI)*ZGAUC(JIJ,JK))*ZSIGMA(JIJ,JK) &
+            & /SQRT(2.*CST%XPI)
           PHLC_HRC(JIJ,JK) = PHLC_HRC(JIJ,JK) + ICEP%XCRIAUTC/PRHODREF(JIJ,JK) * PHLC_HCF(JIJ,JK)
           PHLC_HRC(JIJ,JK) = MAX(PHLC_HRC(JIJ,JK), 0.)
           IF(PHLC_HRC(JIJ,JK) < 1.E-12 .OR. PHLC_HCF(JIJ,JK) < 1.E-6) THEN
@@ -533,7 +535,8 @@ DO JK=IKTB,IKTE
           ZGAUTI(JIJ,JK) = -ZAUTI(JIJ,JK)/SQRT(2.)
           ZGAUI(JIJ,JK) = 1 + ERF(-ZGAUTI(JIJ,JK))
           PHLI_HCF(JIJ,JK) = MAX( 0., MIN(1.,0.5*ZGAUI(JIJ,JK)))
-          PHLI_HRI(JIJ,JK) = ZFRAC(JIJ,JK)*(EXP(-ZGAUTI(JIJ,JK)**2)-ZGAUTI(JIJ,JK)*SQRT(CST%XPI)*ZGAUI(JIJ,JK))*ZSIGMA(JIJ,JK)/SQRT(2.*CST%XPI)
+          PHLI_HRI(JIJ,JK) = ZFRAC(JIJ,JK)*(EXP(-ZGAUTI(JIJ,JK)**2)-ZGAUTI(JIJ,JK)*SQRT(CST%XPI)*ZGAUI(JIJ,JK))*ZSIGMA(JIJ,JK) &
+            & /SQRT(2.*CST%XPI)
           PHLI_HRI(JIJ,JK) = PHLI_HRI(JIJ,JK) + ZCRIAUTI(JIJ,JK)*PHLI_HCF(JIJ,JK)
           PHLI_HRI(JIJ,JK) = MAX(PHLI_HRI(JIJ,JK), 0.)
           IF(PHLI_HRI(JIJ,JK) < 1.E-12 .OR. PHLI_HCF(JIJ,JK) < 1.E-6) THEN
@@ -570,7 +573,8 @@ DO JK=IKTB,IKTE
         ZCOND(JIJ,JK)=0.
       ENDIF
 
-      INQ1(JIJ,JK) = MIN( MAX(-22,FLOOR(MIN(100., MAX(-100., 2*ZQ1(JIJ,JK)))) ), 10)  !inner min/max prevents sigfpe when 2*zq1 does not fit into an int
+      !inner min/max prevents sigfpe when 2*zq1 does not fit into an int
+      INQ1(JIJ,JK) = MIN( MAX(-22,FLOOR(MIN(100., MAX(-100., 2*ZQ1(JIJ,JK)))) ), 10)
       ZINC(JIJ,JK) = 2.*ZQ1(JIJ,JK) - INQ1(JIJ,JK)
 
       PSIGRC(JIJ,JK) =  MIN(1.,(1.-ZINC(JIJ,JK))*ZSRC_1D(INQ1(JIJ,JK))+ZINC(JIJ,JK)*ZSRC_1D(INQ1(JIJ,JK)+1))
