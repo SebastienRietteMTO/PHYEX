@@ -19,6 +19,8 @@ The main entry points of the package are:
   - [turb](@ref turb): to run the turbulence scheme
   - [shallow\_mf](@ref shallow\_mf): to run the shallow convection scheme
 
+The python package is documented in the [pyphyex](@ref pyphyex) entry (python binding and phyex1d 1D model).
+
 In addition, some offline tools are available:
 
   - [main\_rain\_ice](@ref main\_rain\_ice): to drive the [rain\_ice](@ref rain\_ice) subroutine
