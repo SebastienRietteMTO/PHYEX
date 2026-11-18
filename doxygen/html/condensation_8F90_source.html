@@ -743,14 +743,17 @@ $(function() {
 <div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span><span class="comment">!$mnh_end_do()  </span></div>
 <div class="line"><a id="l00661" name="l00661"></a><span class="lineno">  661</span><span class="comment">!$acc end parallel</span></div>
 <div class="line"><a id="l00662" name="l00662"></a><span class="lineno">  662</span><span class="comment">!</span></div>
-<div class="line"><a id="l00663" name="l00663"></a><span class="lineno">  663</span><span class="keywordflow">IF</span> (lhook) <span class="keyword">CALL </span>dr_hook(<span class="stringliteral">&#39;CONDENSATION&#39;</span>,1,zhook_handle)</div>
-<div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span><span class="comment">!</span></div>
-<div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span><span class="keyword">CONTAINS</span></div>
-<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span>include <span class="stringliteral">&quot;compute_frac_ice.func.h&quot;</span></div>
+<div class="line"><a id="l00663" name="l00663"></a><span class="lineno">  663</span>pcldfr=0.</div>
+<div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span>pri_out=0.</div>
+<div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span>prc_out=0.</div>
+<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span><span class="keywordflow">IF</span> (lhook) <span class="keyword">CALL </span>dr_hook(<span class="stringliteral">&#39;CONDENSATION&#39;</span>,1,zhook_handle)</div>
 <div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span><span class="comment">!</span></div>
-<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span><span class="keyword">END SUBROUTINE </span><a class="code hl_function" href="condensation_8F90.html#a932fe4eafeb129ea06fda6ec55f10f36">condensation</a></div>
+<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span><span class="keyword">CONTAINS</span></div>
+<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>include <span class="stringliteral">&quot;compute_frac_ice.func.h&quot;</span></div>
+<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span><span class="comment">!</span></div>
+<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span><span class="keyword">END SUBROUTINE </span><a class="code hl_function" href="condensation_8F90.html#a932fe4eafeb129ea06fda6ec55f10f36">condensation</a></div>
 </div>
-<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span> </div>
+<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span> </div>
 <div class="ttc" id="acompute__frac__ice_8func_8h_html_a6acd9214f569a56dfe4b0fd2b94c133e"><div class="ttname"><a href="compute__frac__ice_8func_8h.html#a6acd9214f569a56dfe4b0fd2b94c133e">compute_frac_ice</a></div><div class="ttdeci">elemental subroutine compute_frac_ice(cst, hfrac_ice, nebn, pfrac_ice, pt)</div><div class="ttdef"><b>Definition</b> <a href="compute__frac__ice_8func_8h_source.html#l00005">compute_frac_ice.func.h:6</a></div></div>
 <div class="ttc" id="acondensation_8F90_html_a932fe4eafeb129ea06fda6ec55f10f36"><div class="ttname"><a href="condensation_8F90.html#a932fe4eafeb129ea06fda6ec55f10f36">condensation</a></div><div class="ttdeci">subroutine condensation(d, cst, icep, nebn, turbn, hfrac_ice, hcondens, hlambda3, ppabs, pzz, prhodref, pt, prv_in, prv_out, prc_in, prc_out, pri_in, pri_out, prr, prs, prg, psigs, lmfconv, pmfconv, pcldfr, psigrc, ouseri, osigmas, ocnd2, picldfr, pwcldfr, pssio, pssiu, pifr, psigqsat, plv, pls, pcph, phlc_hrc, phlc_hcf, phli_hri, phli_hcf, pice_cld_wgt)</div><div class="ttdef"><b>Definition</b> <a href="#l00007">condensation.F90:16</a></div></div>
 <div class="ttc" id="anamespacemodd__cst_html"><div class="ttname"><a href="namespacemodd__cst.html">modd_cst</a></div><div class="ttdef"><b>Definition</b> <a href="modd__cst_8F90_source.html#l00007">modd_cst.F90:7</a></div></div>
