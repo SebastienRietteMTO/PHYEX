@@ -104,6 +104,11 @@ for a single configuration. This mechanism is used by the GitHub workflow (.gith
 the files being stored in the GitHub cache (see .github/actions/refhash/action.yml): the references are
 compiled and run only when their hash is unknown.
 
+The exit status of the comparison step is 0 when the results are identical, 50 when they differ and
+another value in case of error. The GitHub workflow uses it to give two statuses for each tool and
+configuration: the 'compil/exec' job fails only on a hard failure (compilation, execution, error of
+the tools), the 'reproduction' job fails when the results differ from the references.
+
 ### phyex-check\_norms
 
 This command checks the coding norms (described in the [CodingNorms documentation](./CodingNorms.md)) of the source code (for instance: phyex-check\_norms -v src/phyex).
@@ -120,6 +125,19 @@ creation and the test cases of IAL, Meso-NH, testprogs, LMDZ and phyex1d) on the
 checks the different models simultaneously.
 The report is written on the standard output; it can also be sent by email in case of an error (--mail)
 and attached as a status to a github commit (--github-status, the API url to use must be given).
+
+### phyex-changelog
+
+This command lists the commits between two commits or tags (for instance: phyex-changelog v0.9.3 v0.9.4),
+merge commits excluded (--merges to include them), sorted by category according to the title of the pull
+request which introduced each commit (see the [Developer documentation](./Developer.md)): bugfixes, features,
+bugfixes and features, and others (commits not coming from a pull request, or coming from a pull request
+whose title does not follow the rule). Each line gives the pull request number, the date, the hash, the author
+and the first line of the commit message; --format markdown produces a markdown output.
+The commits must be present in the local repository (the one containing the tools, or --git-dir) and on GitHub,
+which is requested to find the pull requests (one request per commit). A GitHub token is recommended
+(GITHUB\_TOKEN or GH\_TOKEN environment variable, or .netrc file): without token, GitHub limits the number of
+requests to 60 per hour.
 
 ### clone\_and\_test.sh
 
