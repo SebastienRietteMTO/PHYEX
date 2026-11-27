@@ -69,9 +69,8 @@ The push of such a tag triggers the "Release" GitHub workflow (.github/workflows
 
   - builds the pyphyex wheels for Linux (x86\_64 and aarch64) in manylinux containers (.github/scripts/build\_wheel.sh) and tests them;
   - builds the source distribution (sdist);
-  - displays the sizes of the wheels and of the sdist in the summary of the run;
   - builds the release note with the phyex-changelog tool (see the [Tools documentation](./Tools.md)): the commits since the previous release tag, sorted by category according to the titles of their pull requests;
-  - for now, does not publish the wheels and the sdist on PyPI: they are, with the release note, artifacts of the workflow run.
+  - publishes the wheels and the sdist on PyPI (the PYPI\_API\_TOKEN secret of the repository must contain a PyPI API token allowed to upload the pyphyex package); the release note is an artifact of the workflow run.
 
 The workflow can also be run manually, on any branch (Actions tab, "Release" workflow, "Run workflow" button): everything is built as for a release, without checking the version and without publishing; the release note then lists the commits since the last release tag. This is useful to check that a release would succeed before tagging.
 
